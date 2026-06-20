@@ -1,0 +1,87 @@
+[
+  {
+    "name": "area:ci",
+    "color": "0b7285",
+    "description": "Continuous integration, repository automation, or checks"
+  },
+  {
+    "name": "area:dependencies",
+    "color": "5c940d",
+    "description": "Dependency or lockfile changes"
+  },
+  {
+    "name": "area:docs",
+    "color": "1864ab",
+    "description": "Documentation and contributor guidance"
+  },
+  {
+    "name": "area:security",
+    "color": "c92a2a",
+    "description": "Security policy, scanning, or vulnerability work"
+  },
+  {
+    "name": "automation",
+    "color": "7048e8",
+    "description": "Bot-created or automation-maintained work"
+  },
+  {
+    "name": "blocked",
+    "color": "868e96",
+    "description": "Cannot proceed without an external decision or dependency"
+  },
+  {
+    "name": "bug",
+    "color": "e03131",
+    "description": "Something is not working as expected"
+  },
+  {
+    "name": "ci",
+    "color": "0b7285",
+    "description": "GitHub Actions or local verification"
+  },
+  {
+    "name": "dependencies",
+    "color": "5c940d",
+    "description": "Dependency updates"
+  },
+  {
+    "name": "enhancement",
+    "color": "2f9e44",
+    "description": "Improvement to existing behavior"
+  },
+  {
+    "name": "good first issue",
+    "color": "12b886",
+    "description": "Small, well-scoped work for new contributors"
+  },
+  {
+    "name": "needs:decision",
+    "color": "f08c00",
+    "description": "Needs maintainer direction before implementation"
+  },
+  {
+    "name": "priority:high",
+    "color": "d9480f",
+    "description": "Important work that should be handled soon"
+  },
+  {
+    "name": "release:major",
+    "color": "9c36b5",
+    "description": "Breaking release-note category"
+  },
+  {
+    "name": "release:minor",
+    "color": "1971c2",
+    "description": "Feature release-note category"
+  },
+  {
+    "name": "release:patch",
+    "color": "2b8a3e",
+    "description": "Fix release-note category"
+  },
+  {
+    "name": "type:documentation",
+    "color": "1864ab",
+    "description": "Documentation-only change"
+  }
+]

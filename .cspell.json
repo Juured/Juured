@@ -1,0 +1,23 @@
+{
+  "version": "0.2",
+  "language": "en",
+  "ignorePaths": ["node_modules", "package-lock.json", ".git", "coverage", "dist", "build"],
+  "words": [
+    "accDescr",
+    "accTitle",
+    "CodeQL",
+    "CODEOWNERS",
+    "Dependabot",
+    "DevSecOps",
+    "Gitleaks",
+    "hackathon",
+    "Juured",
+    "Ker102",
+    "markdownlint",
+    "OSSF",
+    "Ruum",
+    "SARIF",
+    "Scorecard",
+    "nullstate"
+  ]
+}

@@ -1,0 +1,26 @@
+name: Project task
+description: Track repository, documentation, or coordination work.
+title: "chore: "
+labels:
+  - needs:decision
+body:
+  - type: textarea
+    id: objective
+    attributes:
+      label: Objective
+    validations:
+      required: true
+  - type: textarea
+    id: scope
+    attributes:
+      label: Scope
+      description: What is included and excluded?
+    validations:
+      required: true
+  - type: textarea
+    id: done
+    attributes:
+      label: Done when
+      placeholder: |
+        - [ ] ...
+        - [ ] ...

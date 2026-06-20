@@ -1,0 +1,26 @@
+{
+  "name": "juured",
+  "version": "0.0.0",
+  "private": true,
+  "description": "Repository foundation for the Juured Ruum IDE hackathon project.",
+  "license": "UNLICENSED",
+  "scripts": {
+    "format": "prettier --write .",
+    "format:check": "prettier --check .",
+    "labels:sync": "node scripts/sync-labels.mjs",
+    "lint:docs": "markdownlint \"**/*.md\" --ignore node_modules",
+    "lint:package": "sort-package-json --check package.json",
+    "lint:spelling": "cspell . --no-progress --show-suggestions",
+    "lint:structure": "node scripts/verify-structure.mjs",
+    "verify": "npm run lint:docs && npm run lint:package && npm run lint:spelling && npm run lint:structure && npm run format:check"
+  },
+  "devDependencies": {
+    "cspell": "10.0.1",
+    "markdownlint-cli": "0.49.0",
+    "prettier": "3.8.4",
+    "sort-package-json": "4.0.0"
+  },
+  "engines": {
+    "node": ">=24"
+  }
+}

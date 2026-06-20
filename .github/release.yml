@@ -1,0 +1,28 @@
+changelog:
+  exclude:
+    labels:
+      - automation
+    authors:
+      - dependabot
+  categories:
+    - title: Breaking Changes
+      labels:
+        - release:major
+    - title: Features
+      labels:
+        - release:minor
+        - enhancement
+    - title: Fixes
+      labels:
+        - release:patch
+        - bug
+    - title: Documentation
+      labels:
+        - type:documentation
+        - area:docs
+    - title: Security
+      labels:
+        - area:security
+    - title: Other Changes
+      labels:
+        - "*"

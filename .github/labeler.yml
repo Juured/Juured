@@ -1,0 +1,29 @@
+area:docs:
+  - changed-files:
+      - any-glob-to-any-file:
+          - "**/*.md"
+          - "docs/**"
+
+area:ci:
+  - changed-files:
+      - any-glob-to-any-file:
+          - ".github/**"
+          - "scripts/**"
+
+area:security:
+  - changed-files:
+      - any-glob-to-any-file:
+          - "SECURITY.md"
+          - ".github/workflows/security.yml"
+          - ".github/dependabot.yml"
+
+area:dependencies:
+  - changed-files:
+      - any-glob-to-any-file:
+          - "package.json"
+          - "package-lock.json"
+
+type:documentation:
+  - changed-files:
+      - any-glob-to-any-file:
+          - "**/*.md"
