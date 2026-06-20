@@ -71,6 +71,12 @@ export default function Home() {
   const [columns, setColumns] = useState<CompareColumn[]>([]);
   const [filters, setFilters] = useState<Filters>({});
   const [ready, setReady] = useState(false);
+  // Demo-button loading state. `demoStatus` is keyed by monogram label
+  // (TM24, LE7, PI3) so the EmptyState can show per-listing progress as
+  // the demo listings are resolved one by one — covers both the
+  // first-visit auto-load and explicit "Kuva näidet" clicks.
+  const [demoLoading, setDemoLoading] = useState(false);
+  const [demoStatus, setDemoStatus] = useState<Record<string, "pending" | "loading" | "done">>({});
 
   // Load from localStorage + URL share
   useEffect(() => {
@@ -243,6 +249,11 @@ export default function Home() {
       // brand-new construction (Pille tn 11/3, 2019).
       preBakedCadastre?: CompareColumn["cadastre"];
       preBakedEhr?: CompareColumn["ehr"];
+      // Demo-specific: pre-baked lifestyle (POI counts) for the 1 km
+      // raadiuses matrix. Used when the live Overpass / Maa-amet
+      // huvipunktid lookup returns empty (e.g. overpass.osm.ch 2018
+      // snapshot fallback) so the panel doesn't show "Andmed
+      // puuduvad" for every category.
       preBakedLifestyle?: CompareColumn["lifestyle"];
       // Demo-specific: district-level €/m² median for Fair Value. The
       // auto-derived Tallinn city median (€2540) is too coarse for a
@@ -518,7 +529,12 @@ export default function Home() {
   // button uses. Called from both the auto-load effect and the EmptyState.
   // button uses. Called from both the auto-load effect and the EmptyState.
   async function loadDemos() {
+    setDemoLoading(true);
+    setDemoStatus(
+      Object.fromEntries(DEMO_LISTINGS.map((ex) => [ex.label, "pending"])),
+    );
     for (const ex of DEMO_LISTINGS) {
+      setDemoStatus((s) => ({ ...s, [ex.label]: "loading" }));
       await resolveSlot(ex.raw, {
         price: ex.price,
         area: ex.area,
@@ -534,7 +550,9 @@ export default function Home() {
           ?? ex.demoEnrichment?.estpropMedianEurM2
           ?? null,
       });
+      setDemoStatus((s) => ({ ...s, [ex.label]: "done" }));
     }
+    setDemoLoading(false);
   }
 
   function removeColumn(id: string) {
@@ -641,7 +659,11 @@ export default function Home() {
             </div>
 
             {filteredWithScores.length === 0 ? (
-              <EmptyState onTryExample={loadDemos} />
+              <EmptyState
+                loading={demoLoading}
+                demoStatus={demoStatus}
+                onTryExample={loadDemos}
+              />
             ) : (
               <>
                 <div className="flex items-baseline justify-between mb-4">
@@ -836,9 +858,41 @@ function PlanCard({ plan }: { plan: Plan }) {
   );
 }
 
-function EmptyState({ onTryExample }: { onTryExample: () => void }) {
+function EmptyState({
+  onTryExample,
+  loading = false,
+  demoStatus = {},
+}: {
+  onTryExample: () => void;
+  loading?: boolean;
+  demoStatus?: Record<string, "pending" | "loading" | "done">;
+}) {
+  // Counts used by the button label and the progress bar. With no demo
+  // started yet, we still show the 3 listings as "pending" so the user
+  // sees what's about to be loaded.
+  const total = DEMO_LISTINGS.length;
+  const done = DEMO_LISTINGS.filter((ex) => demoStatus[ex.label] === "done").length;
   return (
-    <div className="rounded-lg border border-rule bg-paperDeep p-8 sm:p-12 text-center">
+    <div className="relative rounded-lg border border-rule bg-paperDeep p-8 sm:p-12 text-center overflow-hidden">
+      {/* Progress bar — only visible while a demo run is in flight. Sits
+          flush against the top edge so it reads as a system status bar,
+          not a decorative accent. */}
+      {loading && (
+        <div
+          className="absolute top-0 left-0 right-0 h-[2px] bg-rule"
+          role="progressbar"
+          aria-valuemin={0}
+          aria-valuemax={total}
+          aria-valuenow={done}
+          aria-label={`Laen ${done}/${total}`}
+        >
+          <div
+            className="h-full bg-ink transition-all duration-500 ease-out"
+            style={{ width: `${(done / total) * 100}%` }}
+          />
+        </div>
+      )}
+
       <p className="text-[10.5px] font-semibold uppercase tracking-[0.14em] text-muted">Alusta võrdlust</p>
       <h3 className="display mt-2 text-[28px] text-ink max-w-prose mx-auto">
         Sisesta esimene aadress või klõpsa näidet.
@@ -848,12 +902,61 @@ function EmptyState({ onTryExample }: { onTryExample: () => void }) {
         <strong> Elamiskulud</strong> (igakuised kulud küte + elekter), <strong>Väärtuse kasv</strong> (tuleviku väärtus) ja
         <strong> Elustiil</strong> (park, kool, transport 1 km raadiuses).
       </p>
+
+      {/* Demo listings preview — always rendered so the user knows what
+          "Kuva näidet" actually means. Each row's state updates live as
+          resolveSlot completes for that listing. */}
+      <ul className="mt-7 max-w-md mx-auto border border-rule divide-y divide-rule text-left">
+        {DEMO_LISTINGS.map((ex) => {
+          const status = demoStatus[ex.label] ?? "pending";
+          const isLoading = status === "loading";
+          const isDone = status === "done";
+          return (
+            <li
+              key={ex.label}
+              className="flex items-center gap-3 px-4 py-2.5 text-[13px]"
+              aria-current={isLoading ? "true" : undefined}
+            >
+              <span
+                className={`font-mono text-[12px] font-semibold tracking-wider w-9 shrink-0 transition-colors ${
+                  isLoading || isDone ? "text-ink" : "text-faint"
+                }`}
+              >
+                {ex.label}
+              </span>
+              <span
+                className={`flex-1 truncate transition-colors ${
+                  isLoading ? "text-ink" : isDone ? "text-ink/80" : "text-muted"
+                }`}
+              >
+                {ex.address.split(",")[0]}
+              </span>
+              <span className="shrink-0 w-12 text-right text-[10.5px] uppercase tracking-[0.14em] font-semibold">
+                {isDone ? (
+                  <span className="text-ink" aria-label="Laetud">●</span>
+                ) : isLoading ? (
+                  <span className="text-ink inline-flex gap-[2px]" aria-label="Laen">
+                    <span className="inline-block w-[3px] h-[3px] bg-ink rounded-full animate-pulse" style={{ animationDelay: "0ms" }} />
+                    <span className="inline-block w-[3px] h-[3px] bg-ink rounded-full animate-pulse" style={{ animationDelay: "150ms" }} />
+                    <span className="inline-block w-[3px] h-[3px] bg-ink rounded-full animate-pulse" style={{ animationDelay: "300ms" }} />
+                  </span>
+                ) : (
+                  <span className="text-faint" aria-label="Ootel">○</span>
+                )}
+              </span>
+            </li>
+          );
+        })}
+      </ul>
+
       <button
         onClick={onTryExample}
+        disabled={loading}
         className="mt-6 bg-ink text-paper text-[12px] font-semibold tracking-wider uppercase
-                   px-5 py-3 hover:bg-ink/85 transition-colors"
+                   px-5 py-3 hover:bg-ink/85 transition-colors disabled:opacity-60
+                   disabled:cursor-not-allowed"
       >
-        Kuva näidet
+        {loading ? `Laen ${done}/${total}…` : "Kuva näidet"}
       </button>
       <p className="mt-4 text-[11.5px] text-faint">
         Või kleebi oma kv.ee / city24.ee link — meie otsime aadressi URL-ist ja
