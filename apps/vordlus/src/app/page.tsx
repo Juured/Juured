@@ -448,12 +448,12 @@ export default function Home() {
       energyComparison: ex.energyClass
         ? { thisClass: ex.energyClass, districtMode: d?.districtAverageEurM2 ? "C" : null, nationalMode: d?.nationalEnergyMode ?? "C" }
         : null,
-      // 9. Deviation from comparables — needs /scrape/search
-      deviationFromComparables: null,
-      // 10. Rent vs sale yield — needs /scrape/search?type=rent
-      rentYield: null,
-      // 11. Liquidity — needs /scrape/search
-      liquidity: null,
+      // 9. Deviation from comparables — pre-baked from the demo
+      deviationFromComparables: d?.deviationFromComparables ?? null,
+      // 10. Rent vs sale yield — pre-baked from the demo
+      rentYield: d?.rentYield ?? null,
+      // 11. Liquidity — pre-baked from the demo
+      liquidity: d?.liquidity ?? null,
     };
   }
 
