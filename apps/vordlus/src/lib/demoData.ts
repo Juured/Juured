@@ -72,8 +72,9 @@ export type DemoListing = {
   preBakedEhr?: import("@/lib/estdata").EhrBuilding;
   // Pre-baked lifestyle (POI counts) for buildings where the resolve API's
   // lifestyle lookup returns empty (the OSM Overpass / Maa-amet huvipunktid
-  // proxies sometimes miss Veerenni-area new builds). Without this, the
-  // 1 km raadiuses matrix shows "Andmed puuduvad" for every category.
+  // proxies sometimes miss the spot — the overpass.osm.ch 2018 snapshot
+  // fallback returns 0 for some Kesklinna centroid coords). Without this,
+  // the "1 km raadiuses" matrix shows "Andmed puuduvad" for every category.
   preBakedLifestyle?: import("@/lib/lifestyle").Lifestyle;
 };
 
@@ -164,6 +165,15 @@ export const DEMO_LISTINGS: DemoListing[] = [
       "https://img-kv.ee/image/object/39/3452/137803452.jpg",
     ],
     story: "Renoveeritud ja möbleeritud 2-toaline Lembitu pargi ääres — kõrged laed, kalasaba parkett, kogu mööbel hinna sees, omanikult.",
+    preBakedLifestyle: {
+      park:        { stars: 5, label: "Park",          count: 29 },
+      school:      { stars: 5, label: "Kool",          count: 37 },
+      gym:         { stars: 5, label: "Spordisaal",    count: 11 },
+      transit:     { stars: 5, label: "Ühistransport", count: 127 },
+      shop:        { stars: 5, label: "Pood",          count: 22 },
+      cafe:        { stars: 5, label: "Kohvik",        count: 100 },
+      restaurant:  { stars: 5, label: "Restoran",      count: 149 },
+    },
     demoEnrichment: {
       estpropMedianEurM2: 4200,    // Kesklinn premium
       nationalPercentile: 78,
