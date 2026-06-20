@@ -61,7 +61,7 @@ export function Monogram({ address, buildingType, index, overallScore, overallLa
           fontWeight: 300,
           fontSize: 96,
           lineHeight: 1,
-          color: "#1A1A1A",
+          color: "var(--ink-deep)",
           opacity: showPhoto ? 0 : 0.92,
           letterSpacing: "-0.04em",
           transition: "opacity 200ms ease-out",
@@ -69,14 +69,14 @@ export function Monogram({ address, buildingType, index, overallScore, overallLa
       >
         {deriveGlyph(address)}
       </div>
-      <span className="absolute top-2 left-2 text-[10px] font-semibold tracking-wider uppercase bg-white/90 backdrop-blur px-2 py-0.5 text-ink">
+      <span className="absolute top-2 left-2 text-[10px] font-semibold tracking-wider uppercase bg-paper/90 backdrop-blur px-2 py-0.5 text-ink">
         #{String(index + 1).padStart(2, "0")}
       </span>
       {onClose && (
         <button
           onClick={onClose}
           aria-label="Sulge"
-          className="absolute top-2 right-2 w-7 h-7 grid place-items-center bg-white/90 backdrop-blur border border-rule text-ink text-[12px] hover:bg-ink hover:text-paper transition-colors"
+          className="absolute top-2 right-2 w-7 h-7 grid place-items-center bg-paper/90 backdrop-blur border border-rule text-ink text-[12px] hover:bg-ink hover:text-paper transition-colors"
         >
           ✕
         </button>

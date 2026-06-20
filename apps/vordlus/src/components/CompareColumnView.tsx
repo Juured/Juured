@@ -154,9 +154,9 @@ export default function CompareColumnView({ column, index, medianPriceM2, onRemo
     diffVsMedian == null
       ? undefined
       : diffVsMedian > 0.05
-        ? "#9A1B1B"
+        ? "var(--up)"
         : diffVsMedian < -0.05
-          ? "#166534"
+          ? "var(--down)"
           : undefined;
 
   // Whether the user still owes us data
@@ -173,7 +173,7 @@ export default function CompareColumnView({ column, index, medianPriceM2, onRemo
   ];
 
   return (
-    <div className="bg-white border border-rule overflow-hidden flex flex-col">
+    <div className="bg-paperDeep border border-rule overflow-hidden flex flex-col">
       {/* Monogram (typographic identity for the property) */}
       <div className="relative">
         <PhotoFor

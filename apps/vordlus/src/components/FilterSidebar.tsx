@@ -51,7 +51,7 @@ function FieldNumber({
           value={value ?? ""}
           onChange={(e) => onChange(e.target.value ? Number(e.target.value) : undefined)}
           placeholder="—"
-          className="w-full bg-white border border-rule px-2.5 py-1.5 pr-7 text-[13px] font-mono
+          className="w-full bg-field border border-rule px-2.5 py-1.5 pr-7 text-[13px] font-mono
                      focus:border-ink focus:ring-0 outline-none transition-colors"
         />
         {suffix && (
@@ -96,7 +96,7 @@ export default function FilterSidebar({ filters, onChange, matchCount, totalCoun
   return (
     <aside className="w-full lg:w-72 shrink-0">
       <div className="lg:sticky lg:top-20">
-        <div className="bg-white border border-rule rounded-lg overflow-hidden">
+        <div className="bg-paperDeep border border-rule rounded-lg overflow-hidden">
           <div className="px-5 pt-5 pb-3 border-b border-rule">
             <p className="text-[10.5px] font-semibold uppercase tracking-[0.14em] text-muted">Filtrid</p>
             <h2 className="mt-1 display-tight text-[19px] text-ink leading-tight">
@@ -139,7 +139,7 @@ export default function FilterSidebar({ filters, onChange, matchCount, totalCoun
                       className={`py-1.5 text-[13px] font-semibold border transition-colors
                                   ${active
                                     ? "bg-ink text-paper border-ink"
-                                    : "bg-white border-rule text-muted hover:border-ink hover:text-ink"}`}
+                                    : "bg-paper border-rule text-muted hover:border-ink hover:text-ink"}`}
                     >
                       {n}
                     </button>
@@ -171,7 +171,7 @@ export default function FilterSidebar({ filters, onChange, matchCount, totalCoun
                                     ? good
                                       ? "bg-energyA border-energyA text-white"
                                       : "bg-ink border-ink text-paper"
-                                    : "bg-white border-rule text-muted hover:border-ink hover:text-ink"}`}
+                                    : "bg-paper border-rule text-muted hover:border-ink hover:text-ink"}`}
                     >
                       {k}
                     </button>
@@ -194,7 +194,7 @@ export default function FilterSidebar({ filters, onChange, matchCount, totalCoun
                       className={`py-1.5 text-[11.5px] font-semibold border transition-colors
                                   ${active
                                     ? "bg-ink text-paper border-ink"
-                                    : "bg-white border-rule text-muted hover:border-ink hover:text-ink"}`}
+                                    : "bg-paper border-rule text-muted hover:border-ink hover:text-ink"}`}
                     >
                       {o.label}
                     </button>
@@ -222,7 +222,7 @@ export default function FilterSidebar({ filters, onChange, matchCount, totalCoun
                           <button
                             key={n}
                             onClick={() => update({ [row.key]: n === 0 ? undefined : n } as Partial<Filters>)}
-                            className={`w-5 h-5 text-[10px] font-semibold border ${active ? "bg-ink text-paper border-ink" : "bg-white text-muted border-rule hover:border-ink"}`}
+                            className={`w-5 h-5 text-[10px] font-semibold border ${active ? "bg-ink text-paper border-ink" : "bg-paper text-muted border-rule hover:border-ink"}`}
                             aria-label={`${row.label} ${n}+`}
                           >
                             {n === 0 ? "—" : n}

@@ -638,7 +638,7 @@ export default function Home() {
 
 function EmptyState({ onTryExample }: { onTryExample: () => void }) {
   return (
-    <div className="rounded-lg border border-rule bg-white p-8 sm:p-12 text-center">
+    <div className="rounded-lg border border-rule bg-paperDeep p-8 sm:p-12 text-center">
       <p className="text-[10.5px] font-semibold uppercase tracking-[0.14em] text-muted">Alusta võrdlust</p>
       <h3 className="display mt-2 text-[28px] text-ink max-w-prose mx-auto">
         Sisesta esimene aadress või klõpsa näidet.

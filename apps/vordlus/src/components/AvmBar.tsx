@@ -24,7 +24,7 @@ export function AvmBar({ pricePerM2, baseline, baselineSource }: Props) {
           style={{
             left: aboveMedian ? "50%" : `${leftPct}%`,
             right: aboveMedian ? `${100 - leftPct}%` : "50%",
-            background: aboveMedian ? "#fef2f2" : "#f0fdf4",
+            background: aboveMedian ? "#FBF0EB" : "#F0F4E8",
           }}
           data-fill="property"
         />

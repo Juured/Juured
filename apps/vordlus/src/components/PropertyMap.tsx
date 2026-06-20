@@ -21,15 +21,17 @@ type PoiItem = {
   name: string;
 };
 
+// Warm muted palette — every hue sits in the cream/taupe/ochre family
+// so the map doesn't punch a hole in the editorial aesthetic.
 const CATEGORY_COLOR: Record<PoiCategory, string> = {
-  park: "#15803d",
-  school: "#0f766e",
-  kindergarten: "#7c3aed",
-  gym: "#b45309",
-  transit: "#1d4ed8",
-  shop: "#a16207",
-  cafe: "#be123c",
-  restaurant: "#c2410c",
+  park: "#5C7A3F",          // warm leaf green
+  school: "#5C6D6D",        // slate
+  kindergarten: "#8C6D4F",  // brand ochre
+  gym: "#8B5A3F",           // terracotta
+  transit: "#6D7A8C",       // slate blue
+  shop: "#A88A4F",          // sand
+  cafe: "#8B5A5A",          // dusty rose
+  restaurant: "#A8623F",    // burnt sienna
 };
 
 const CATEGORY_LABEL: Record<PoiCategory, string> = {

@@ -88,7 +88,7 @@ export default function CompareSlot({ index, column, onChange, onResolve }: Prop
     if (column.input.manualArea == null) missing.push("m²");
     if (column.input.manualRooms == null) missing.push("toad");
     return (
-      <div className="rounded-md border border-rule bg-white overflow-hidden">
+      <div className="rounded-md border border-rule bg-paperDeep overflow-hidden">
         <div className="px-3 py-2.5 border-b border-rule flex items-center justify-between gap-2">
           <span className="eyebrow text-faint">#{String(index + 1).padStart(2, "0")}</span>
           <button
@@ -125,7 +125,7 @@ export default function CompareSlot({ index, column, onChange, onResolve }: Prop
 
   // Empty state: paste slot
   return (
-    <div className="rounded-md border border-dashed border-rule2 bg-white/40">
+    <div className="rounded-md border border-dashed border-rule2 bg-paperDeep/40">
       <div className="px-3 py-2 border-b border-rule flex items-center justify-between">
         <span className="eyebrow text-faint">#{String(index + 1).padStart(2, "0")}</span>
         {column && (
