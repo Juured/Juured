@@ -1,7 +1,11 @@
 import { describe, expect, it } from "vitest";
-import { adaptCurrentColumn } from "@/lib/intelligence/fromCurrentData";
+import {
+  adaptCurrentColumn,
+  evaluateCurrentColumn,
+} from "@/lib/intelligence/fromCurrentData";
 import { defaultScores, type CompareColumn } from "@/lib/compareStore";
 import { EMPTY_LIFESTYLE } from "@/lib/lifestyle";
+import { buildProfilePolicy } from "@/lib/intelligence/profiles";
 
 function column(overrides: Partial<CompareColumn> = {}): CompareColumn {
   return {
@@ -134,5 +138,18 @@ describe("current Vordlus data adapter", () => {
 
     expect(adapted.evidence.some((fact) => fact.key === "building.energy_class")).toBe(false);
     expect(adapted.evidence.some((fact) => fact.key === "cadastre.parcel_area_m2")).toBe(false);
+  });
+
+  it("evaluates current data through the shared intelligence pipeline", () => {
+    const current = column();
+    current.scores.fairValue.score = 4;
+    current.scores.tco.score = 2;
+
+    const homebuyer = evaluateCurrentColumn(current, buildProfilePolicy("homebuyer", {}));
+    const investor = evaluateCurrentColumn(current, buildProfilePolicy("investor", {}));
+
+    expect(homebuyer.scores.objectiveDimensions).toEqual(investor.scores.objectiveDimensions);
+    expect(homebuyer.profilePolicy.profile).toBe("homebuyer");
+    expect(investor.profilePolicy.profile).toBe("investor");
   });
 });

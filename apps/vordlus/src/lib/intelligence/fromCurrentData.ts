@@ -1,7 +1,9 @@
 import type { AgentListingSummary } from "./agentPackage";
-import type { ConfidenceInputs } from "./confidence";
+import { calculateConfidence, type ConfidenceInputs } from "./confidence";
 import type { CompareColumn } from "../compareStore";
-import type { RiskContext } from "./riskRules";
+import type { ProfilePolicy } from "./profiles";
+import { evaluateRiskRules, type RiskContext } from "./riskRules";
+import { calculateScores, type PersonalizedScoreResult } from "./scoring";
 import {
   createEvidenceFact,
   type EvidenceFact,
@@ -16,6 +18,11 @@ export type CurrentDataAdaptation = {
   metrics: MetricResult[];
   riskContext: RiskContext;
   confidenceInputs: ConfidenceInputs;
+};
+
+export type CurrentColumnEvaluation = CurrentDataAdaptation & {
+  profilePolicy: ProfilePolicy;
+  scores: PersonalizedScoreResult;
 };
 
 function scoreFromStars(stars: number): number {
@@ -245,5 +252,26 @@ export function adaptCurrentColumn(column: CompareColumn): CurrentDataAdaptation
       inferredEvidenceRatio:
         evidence.length > 0 ? 1 - observedCount / evidence.length : 0,
     },
+  };
+}
+
+export function evaluateCurrentColumn(
+  column: CompareColumn,
+  profilePolicy: ProfilePolicy,
+): CurrentColumnEvaluation {
+  const adapted = adaptCurrentColumn(column);
+  const confidence = calculateConfidence(adapted.confidenceInputs);
+  const riskRules = evaluateRiskRules(adapted.riskContext);
+  const scores = calculateScores({
+    metrics: adapted.metrics,
+    profilePolicy,
+    riskRules,
+    confidence: confidence.overall,
+  });
+
+  return {
+    ...adapted,
+    profilePolicy,
+    scores,
   };
 }
