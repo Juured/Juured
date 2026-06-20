@@ -9,6 +9,7 @@ import { Monogram } from "@/components/Monogram";
 import { RiskBadges } from "@/components/RiskBadges";
 import { PlaneeringuRadar } from "@/components/PlaneeringuRadar";
 import { EnrichmentPanel } from "@/components/EnrichmentPanel";
+import { LoanCalculator } from "@/components/LoanCalculator";
 
 const Icon = ({ d, size = 14 }: { d: string; size?: number }) => (
   <svg
@@ -345,6 +346,7 @@ export default function CompareColumnView({ column, index, medianPriceM2, onRemo
 
       <RiskBadges radon={column.radon} flood={column.flood} />
       <EnrichmentPanel data={column.enrichment} />
+      <LoanCalculator propertyPrice={price} />
     </div>
   );
 }
