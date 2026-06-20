@@ -6,9 +6,9 @@ Accepted
 
 ## Context
 
-Juured is starting as an empty repository for a Ruum IDE hackathon project with multiple
-collaborators. The product stack has not been selected yet, but the repository still needs
-professional collaboration, security, CI/CD, release, and documentation defaults.
+Juured is starting as an empty repository with multiple collaborators. The product stack has not
+been selected yet, but the repository still needs professional collaboration, security, CI/CD,
+release, and documentation defaults.
 
 ## Decision
 

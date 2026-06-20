@@ -26,6 +26,8 @@ Codex, Claude Code, Cursor, or similar tools.
   existing issues and create or claim an issue when no suitable one exists.
 - Keep work scoped to one issue or one clear objective per branch.
 - Update the issue or pull request with progress, blockers, architectural impact, and handoff notes.
+- Prefer more small checkpoint commits over fewer large commits. Commit after meaningful verified
+  progress so collaborators and their agents can understand the sequence of work.
 - Do not create parallel architecture, workflow, or tracking systems. Extend the existing files
   instead.
 - Do not create empty product directories. Add `apps/`, `packages/`, `services/`, or `infra/` only

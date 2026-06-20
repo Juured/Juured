@@ -12,7 +12,7 @@ main
   chore/24-label-sync
 ```
 
-This keeps review smaller and reduces merge conflicts for hackathon collaboration.
+This keeps review smaller and reduces merge conflicts for multi-collaborator work.
 
 ## Pull Request Expectations
 
@@ -40,6 +40,10 @@ posture rather than a single PR diff.
 3. Address reviewer comments in follow-up commits.
 4. Re-run `npm run verify` after meaningful changes.
 5. Squash merge or rebase merge according to maintainer preference.
+
+Prefer more small checkpoint commits over fewer large commits while work is in progress. The final
+merge strategy can still squash if maintainers want a compact main history, but branch history
+should make collaboration and handoff easy.
 
 ## Merge Conflict Avoidance
 

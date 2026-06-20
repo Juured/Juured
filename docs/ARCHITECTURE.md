@@ -1,8 +1,7 @@
 # Architecture
 
-Juured is currently a repository foundation for an internal Ruum IDE hackathon project. Product
-architecture should be added only after the application stack and first implementation scope are
-selected.
+Juured is currently a repository foundation. Product architecture should be added only after the
+application stack and first implementation scope are selected.
 
 The foundation has two jobs:
 

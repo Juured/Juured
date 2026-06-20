@@ -5,8 +5,6 @@
 [![Release](https://github.com/Juured/Juured/actions/workflows/release.yml/badge.svg)](https://github.com/Juured/Juured/actions/workflows/release.yml)
 ![Visibility: internal](https://img.shields.io/badge/visibility-internal-495057.svg)
 
-Juured is a Ruum IDE project prepared for nonprofit Estonian hackathon collaboration.
-
 This repository is intentionally bootstrapped before product code is added. The goal is to make the
 project easy for judges, team members, and future maintainers to understand while keeping
 collaboration, security, and release hygiene in place from the first implementation pull request.

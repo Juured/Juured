@@ -39,6 +39,8 @@ chore/<issue-number>-short-description
 Agents must keep their work discoverable:
 
 - Link commits and PRs to the relevant issue.
+- Prefer more small checkpoint commits over fewer large commits. Each checkpoint should capture
+  meaningful progress that another collaborator can inspect or continue from.
 - Mention changed boundaries such as `apps/`, `packages/`, `services/`, `infra/`, or `.github/`.
 - Record blockers as issue comments instead of leaving them only in chat.
 - Create a new issue when discovering work that should not be bundled into the current branch.

@@ -1,7 +1,7 @@
 # Code of Conduct
 
-Juured is built for collaborative nonprofit hackathon work. Contributors are expected to keep
-discussion respectful, practical, and focused on the project.
+Juured is built for focused team collaboration. Contributors are expected to keep discussion
+respectful, practical, and focused on the project.
 
 ## Expected Behavior
 

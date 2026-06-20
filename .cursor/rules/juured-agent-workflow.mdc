@@ -17,6 +17,7 @@ Rules:
 
 - Use GitHub issues as the progress tracker.
 - Keep work scoped to one issue or objective per branch.
+- Prefer small checkpoint commits after meaningful verified progress.
 - Update the issue or PR with progress, blockers, changed files, checks, and handoff notes.
 - Do not create empty `apps/`, `packages/`, `services/`, or `infra/` directories.
 - Do not create a second architecture or progress-tracking system.

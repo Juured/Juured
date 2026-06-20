@@ -2,7 +2,7 @@
   "name": "juured",
   "version": "0.0.0",
   "private": true,
-  "description": "Repository foundation for the Juured Ruum IDE hackathon project.",
+  "description": "Repository foundation for Juured.",
   "license": "UNLICENSED",
   "scripts": {
     "format": "prettier --write .",

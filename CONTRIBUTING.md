@@ -30,6 +30,8 @@ the pull request.
 
 - Link the issue or decision that explains the change.
 - Keep the PR description concrete: what changed, why it changed, and how it was verified.
+- Prefer more small commits over one large commit. Each commit should represent a meaningful,
+  verified checkpoint.
 - Request review from CODEOWNERS when protected branch settings are enabled.
 - Rebase or update from `main` before merge when the branch is stale.
 

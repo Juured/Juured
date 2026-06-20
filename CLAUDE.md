@@ -15,6 +15,7 @@ Before making structural or product changes, read:
 - Use GitHub issues as the source of truth for progress and blockers.
 - Work in short-lived branches from `main`.
 - Keep each branch tied to one issue or one clearly stated objective.
+- Prefer small checkpoint commits after meaningful verified progress.
 - Update the issue or PR with handoff notes before stopping.
 - Run `npm run verify` before claiming the work is ready.
 
