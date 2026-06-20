@@ -312,7 +312,7 @@ export default function CompareColumnView({ column, index, medianPriceM2, onRemo
         <table className="w-full text-[11.5px]">
           <tbody>
 <Row
-  label="Ehitise liik TEST"
+  label="Ehitise liik "
   value={e?.nimetus ?? "—"}
   info="Näitab hoone tüüpi või kasutusotstarvet EHR andmete järgi, näiteks üksikelamu, korterelamu või ärihoone."
 />
