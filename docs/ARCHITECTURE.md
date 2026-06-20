@@ -164,3 +164,5 @@ multiple agents from editing one shared status file and creating unnecessary mer
 - Keep shared workflows small and composable.
 - Add stack-specific checks only when the stack exists in the repository.
 - Keep local verification and CI aligned through `npm run verify`.
+- Use `.github/ISSUE_TEMPLATE/decision.yml` when a decision needs team alignment before coding.
+- Copy `docs/adr/0000-template.md` when documenting accepted architecture decisions.

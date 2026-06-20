@@ -75,6 +75,10 @@ Create an issue when:
 - You identify a future task that should not be implemented immediately.
 - A product boundary or shared interface needs discussion before coding.
 
+Use `.github/ISSUE_TEMPLATE/decision.yml` for decisions that need team alignment before
+implementation. If the decision changes architecture, copy `docs/adr/0000-template.md` into the next
+numbered ADR file and update it after the decision is accepted.
+
 Use labels consistently:
 
 - `needs:decision` for maintainer or team decisions.

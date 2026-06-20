@@ -20,6 +20,7 @@ const requiredFiles = [
   ".github/labels.json",
   ".github/pull_request_template.md",
   ".github/ISSUE_TEMPLATE/agent_task.yml",
+  ".github/ISSUE_TEMPLATE/decision.yml",
   ".github/release.yml",
   ".github/workflows/ci.yml",
   ".github/workflows/security.yml",
@@ -32,6 +33,7 @@ const requiredFiles = [
   "docs/RELEASE_PROCESS.md",
   "docs/REPOSITORY_SETTINGS.md",
   "docs/SECURITY_CONTROLS.md",
+  "docs/adr/0000-template.md",
   "docs/adr/0001-repository-foundation.md",
 ];
 

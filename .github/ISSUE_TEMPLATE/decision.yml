@@ -1,0 +1,66 @@
+name: Decision request
+description: Ask for a team or maintainer decision before implementation.
+title: "decision: "
+labels:
+  - needs:decision
+  - needs:coordination
+body:
+  - type: textarea
+    id: question
+    attributes:
+      label: Decision needed
+      description: What exact question needs a decision?
+      placeholder: Should we use X or Y for ...
+    validations:
+      required: true
+  - type: textarea
+    id: context
+    attributes:
+      label: Context
+      description: What background should reviewers know?
+      placeholder: |
+        Current state:
+        Relevant docs:
+        Related issue or PR:
+    validations:
+      required: true
+  - type: textarea
+    id: options
+    attributes:
+      label: Options considered
+      description: List realistic choices and tradeoffs.
+      placeholder: |
+        Option A:
+        - Pros:
+        - Cons:
+
+        Option B:
+        - Pros:
+        - Cons:
+    validations:
+      required: true
+  - type: textarea
+    id: recommendation
+    attributes:
+      label: Recommendation
+      description: Which option do you recommend and why?
+    validations:
+      required: true
+  - type: textarea
+    id: impact
+    attributes:
+      label: Impact
+      description: What files, teams, users, workflows, or architecture boundaries are affected?
+  - type: textarea
+    id: deadline
+    attributes:
+      label: Decision deadline
+      description: When is this needed, and what is blocked until then?
+  - type: checkboxes
+    id: followup
+    attributes:
+      label: Follow-up
+      options:
+        - label: This decision needs an ADR if accepted.
+        - label: This decision affects the README or architecture docs.
+        - label: This decision blocks active implementation work.
