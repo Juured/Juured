@@ -105,7 +105,7 @@ async function fetchListingPhoto(req: NextRequest, listingUrl: string): Promise<
 }
 
 export async function POST(req: NextRequest) {
-  let body: { raw?: string; manual?: { cadastre?: CadastreRecord; ehr?: EhrBuilding; estpropMedian?: number } };
+  let body: { raw?: string; manual?: { cadastre?: CadastreRecord; ehr?: EhrBuilding; estpropMedian?: number; lifestyle?: Lifestyle } };
   try {
     body = await req.json();
   } catch {
@@ -228,6 +228,15 @@ export async function POST(req: NextRequest) {
     // in the same district — we want the Kesklinn-specific number.
     if (body.manual?.estpropMedian != null && out.cadastre) {
       out.cadastre.estprop_median_eur_m2 = body.manual.estpropMedian;
+    }
+    // Demo override: pre-baked lifestyle (POI counts) when the OSM
+    // Overpass / Maa-amet huvipunktid lookup returns empty for the
+    // pre-baked cadastre's coordinates. The lifestyle fetch below will
+    // overwrite this if it finds data, so the pre-baked values are
+    // only a fallback for "all-empty" responses.
+    if (body.manual?.lifestyle) {
+      const hasAny = (Object.values(body.manual.lifestyle) as { count: number }[]).some((v) => v.count > 0);
+      if (hasAny) out.lifestyle = body.manual.lifestyle;
     }
 
     if (out.cadastre && out.cadastre.estprop_median_eur_m2 == null) {

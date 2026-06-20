@@ -243,6 +243,7 @@ export default function Home() {
       // brand-new construction (Pille tn 11/3, 2019).
       preBakedCadastre?: CompareColumn["cadastre"];
       preBakedEhr?: CompareColumn["ehr"];
+      preBakedLifestyle?: CompareColumn["lifestyle"];
       // Demo-specific: district-level €/m² median for Fair Value. The
       // auto-derived Tallinn city median (€2540) is too coarse for a
       // three-apartment comparison in Kesklinn — we want €4200.
@@ -266,6 +267,7 @@ export default function Home() {
                 ehrEnergyClass: manual.ehrEnergyClass,
                 cadastre: manual.preBakedCadastre ?? undefined,
                 ehr: manual.preBakedEhr ?? undefined,
+                lifestyle: manual.preBakedLifestyle,
                 estpropMedian: manual.estpropMedian,
               }
             : undefined,
@@ -527,6 +529,7 @@ export default function Home() {
         ehrEnergyClass: ex.energyClass ?? null,
         preBakedCadastre: ex.preBakedCadastre,
         preBakedEhr: ex.preBakedEhr,
+        preBakedLifestyle: ex.preBakedLifestyle,
         estpropMedian: ex.preBakedCadastre?.estprop_median_eur_m2
           ?? ex.demoEnrichment?.estpropMedianEurM2
           ?? null,

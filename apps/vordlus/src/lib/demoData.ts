@@ -70,6 +70,11 @@ export type DemoListing = {
   // would leave the building panel and lifestyle lookup empty.
   preBakedCadastre?: import("@/lib/estdata").CadastreRecord;
   preBakedEhr?: import("@/lib/estdata").EhrBuilding;
+  // Pre-baked lifestyle (POI counts) for buildings where the resolve API's
+  // lifestyle lookup returns empty (the OSM Overpass / Maa-amet huvipunktid
+  // proxies sometimes miss Veerenni-area new builds). Without this, the
+  // 1 km raadiuses matrix shows "Andmed puuduvad" for every category.
+  preBakedLifestyle?: import("@/lib/lifestyle").Lifestyle;
 };
 
 export const DEMO_LISTINGS: DemoListing[] = [
@@ -208,6 +213,15 @@ export const DEMO_LISTINGS: DemoListing[] = [
       "https://img-kv.ee/image/object/39/8777/134738777.jpg",
     ],
     story: "Uueväärne ja nutika planeeringuga 1-toaline Pille 11 majas (2019) — lift, maa-alune garaaž, energiamärgis B, plaan olemas.",
+    preBakedLifestyle: {
+      park:        { stars: 3, label: "Park",          count: 18 },
+      school:      { stars: 3, label: "Kool",          count: 22 },
+      gym:         { stars: 2, label: "Spordisaal",    count: 7 },
+      transit:     { stars: 5, label: "Ühistransport", count: 96 },
+      shop:        { stars: 3, label: "Pood",          count: 16 },
+      cafe:        { stars: 4, label: "Kohvik",        count: 64 },
+      restaurant:  { stars: 4, label: "Restoran",      count: 82 },
+    },
     preBakedCadastre: {
       geom: "POLYGON((0 0,0 1,1 1,1 0,0 0))",
       tunnus: "78401:108:4320",
