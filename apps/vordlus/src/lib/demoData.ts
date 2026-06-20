@@ -247,7 +247,7 @@ export const DEMO_LISTINGS: DemoListing[] = [
           energiaValjastKp: "2019-03-20",
           energiaKehtibKuniKp: "2029-03-19",
           energiaKaalKasutus: null,
-          tarnEn: 95,
+          tarnEn: "95",
           tarnEnKK: null,
           kytteTyypTxt: "Kaugküte",
         },
