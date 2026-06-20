@@ -92,6 +92,15 @@ export const DEMO_LISTINGS: DemoListing[] = [
     district: "Kesklinn (Tartu mnt / Liivalaia nurk)",
     listingUrl: "https://www.kv.ee/kliendipaeval-eripakkumine-7000-eurot-tavahind-224-3848412.html",
     broker: "Eveli Lindell (Lindell Kinnisvara OÜ)",
+    preBakedLifestyle: {
+      park:        { stars: 5, label: "Park",          count: 16 },
+      school:      { stars: 5, label: "Kool",          count: 31 },
+      gym:         { stars: 5, label: "Spordisaal",    count: 11 },
+      transit:     { stars: 5, label: "Ühistransport", count: 143 },
+      shop:        { stars: 5, label: "Pood",          count: 19 },
+      cafe:        { stars: 5, label: "Kohvik",        count: 84 },
+      restaurant:  { stars: 5, label: "Restoran",      count: 109 },
+    },
     photos: [
       "https://img-kv.ee/image/object/4/6785/135016785.jpg",
       "https://img-kv.ee/image/object/39/6784/135016784.jpg",
