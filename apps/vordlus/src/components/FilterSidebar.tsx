@@ -10,7 +10,7 @@ export type Filters = {
   roomsMin?: number;
   energy?: string[];
   minOverall?: number;
-  greenMortgageOnly?: boolean;
+  greenMortgageOnly?: boolean; // deprecated — Rohelaen is being removed
   minParkStars?: number;
   minSchoolStars?: number;
   minTransitStars?: number;
@@ -89,7 +89,6 @@ export default function FilterSidebar({ filters, onChange, matchCount, totalCoun
     (filters.roomsMin != null) ||
     (filters.energy?.length ?? 0) > 0 ||
     (filters.minOverall != null && filters.minOverall > 0) ||
-    filters.greenMortgageOnly === true ||
     (filters.minParkStars != null && filters.minParkStars > 0) ||
     (filters.minSchoolStars != null && filters.minSchoolStars > 0) ||
     (filters.minTransitStars != null && filters.minTransitStars > 0);
@@ -203,20 +202,6 @@ export default function FilterSidebar({ filters, onChange, matchCount, totalCoun
                 })}
               </div>
               <p className="mt-1.5 text-[10.5px] text-faint">Filtreeri 4 skoori keskmise järgi</p>
-            </div>
-
-            {/* Green mortgage only */}
-            <div>
-              <p className="text-[10.5px] font-semibold uppercase tracking-[0.14em] text-muted mb-2">Rohelaen</p>
-              <label className="flex items-center gap-2 text-[12px] cursor-pointer">
-                <input
-                  type="checkbox"
-                  checked={filters.greenMortgageOnly ?? false}
-                  onChange={(e) => update({ greenMortgageOnly: e.target.checked })}
-                  className="accent-ink"
-                />
-                <span className="text-ink">Ainult rohelaenu sobilikud (4+)</span>
-              </label>
             </div>
 
             {/* Lifestyle minimums */}

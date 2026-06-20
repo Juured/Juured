@@ -63,7 +63,8 @@ nwr["amenity"="cafe"](around:${radius},${lat},${lon});
 nwr["amenity"="restaurant"](around:${radius},${lat},${lon}););
 out tags center;`;
 
-  let elements: { tags?: Record<string, string> }[] = [];
+  const detail = searchParams.get("detail") === "1" || searchParams.get("detail") === "true";
+  let elements: { tags?: Record<string, string>; lat?: number; lon?: number; center?: { lat: number; lon: number } }[] = [];
   let usedMirror = "";
   let lastErr = "";
   for (const mirror of OVERPASS_MIRRORS) {
@@ -85,10 +86,9 @@ out tags center;`;
         lastErr = `Overpass ${r.status}`;
         continue;
       }
-      const j = (await r.json()) as { elements?: { tags?: Record<string, string> }[] };
+      const j = (await r.json()) as { elements?: { tags?: Record<string, string>; lat?: number; lon?: number; center?: { lat: number; lon: number } }[] };
       const got = j.elements ?? [];
       const ms = Date.now() - t0;
-      // If empty + not last mirror, this mirror is probably stale — try next.
       if (got.length === 0 && mirror !== OVERPASS_MIRRORS[OVERPASS_MIRRORS.length - 1]) {
         console.log(`[poi] ${mirror} returned 0 in ${ms}ms, trying next mirror`);
         continue;
@@ -111,12 +111,27 @@ out tags center;`;
   // for the first matching rule, which is fine.
   const counts: Record<string, number> = {};
   for (const r of POI_RULES) counts[r.key] = 0;
+  const items: { category: string; lat: number; lon: number; name: string }[] = [];
   for (const el of elements) {
     const tags = el.tags ?? {};
+    let matchedKey: string | null = null;
     for (const r of POI_RULES) {
       if (r.match(tags)) {
         counts[r.key]++;
+        matchedKey = r.key;
         break;
+      }
+    }
+    if (detail && matchedKey) {
+      const lat = typeof el.lat === "number" ? el.lat : el.center?.lat;
+      const lon = typeof el.lon === "number" ? el.lon : el.center?.lon;
+      if (lat != null && lon != null) {
+        items.push({
+          category: matchedKey,
+          lat,
+          lon,
+          name: tags.name ?? tags["addr:housename"] ?? tags["addr:street"] ?? `${matchedKey}`,
+        });
       }
     }
   }
@@ -137,6 +152,7 @@ out tags center;`;
       lon,
       radius,
       pois: result,
+      items,
       source: usedMirror || null,
       warning: usedMirror ? null : (lastErr || "Overpass unreachable; showing 0 counts"),
     },

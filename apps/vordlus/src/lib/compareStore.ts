@@ -28,17 +28,19 @@ export type CompareColumn = {
   planeeringud: { name: string; maxFloors: number }[] | null;
   listingPhoto?: string | null;
   enrichment: EnrichmentData | null;
+  lat?: number | null;
+  lon?: number | null;
   scores: PropertyScores; // 4-score evaluation
   fetchedAt: number;
   errors: string[];
 };
 
-const STORAGE_NAME = "vordlus.compare.v1";
+const STORAGE_KEY = "vordlus.compare.v1";
 
 export function loadCompare(): CompareColumn[] {
   if (typeof window === "undefined") return [];
   try {
-    const raw = localStorage.getItem(STORAGE_NAME);
+    const raw = localStorage.getItem(STORAGE_KEY);
     if (!raw) return [];
     const parsed = JSON.parse(raw);
     return Array.isArray(parsed) ? parsed : [];
@@ -50,7 +52,7 @@ export function loadCompare(): CompareColumn[] {
 export function saveCompare(cols: CompareColumn[]) {
   if (typeof window === "undefined") return;
   try {
-    localStorage.setItem(STORAGE_NAME, JSON.stringify(cols));
+    localStorage.setItem(STORAGE_KEY, JSON.stringify(cols));
   } catch {}
 }
 

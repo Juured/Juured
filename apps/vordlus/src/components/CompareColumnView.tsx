@@ -162,14 +162,14 @@ export default function CompareColumnView({ column, index, medianPriceM2, onRemo
   // Whether the user still owes us data
   const needsManual = price == null || (!hasManualArea && unitKind !== "single");
 
-  // Build the 5 scores
-  const { fairValue, tco, appreciation, lifestyle, greenMortgage, overall, overallLabel } = column.scores;
+  // Build the 4 scores (Rohelaen is being removed — the other AI is
+  // bringing new demo listings and may revamp scoring entirely)
+  const { fairValue, tco, appreciation, lifestyle, overall, overallLabel } = column.scores;
   const scoreRows: { key: ScoreKey; value: number; reason: string; tone: "good" | "warn" | "bad" | "neutral" }[] = [
     { key: "fairValue", value: fairValue.score, reason: fairValue.reason, tone: fairValue.score >= 4 ? "good" : fairValue.score <= 2 ? "bad" : "neutral" },
     { key: "tco", value: tco.score, reason: tco.reason, tone: tco.score >= 4 ? "good" : tco.score <= 2 ? "bad" : "neutral" },
     { key: "appreciation", value: appreciation.score, reason: appreciation.reason, tone: appreciation.score >= 4 ? "good" : appreciation.score <= 2 ? "bad" : "neutral" },
     { key: "lifestyle", value: lifestyle.score, reason: lifestyle.reason, tone: lifestyle.score >= 4 ? "good" : lifestyle.score <= 2 ? "bad" : "neutral" },
-    { key: "greenMortgage", value: greenMortgage.score, reason: greenMortgage.reason, tone: greenMortgage.tone },
   ];
 
   return (

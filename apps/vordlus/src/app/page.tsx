@@ -4,7 +4,6 @@ import { useEffect, useMemo, useState } from "react";
 import FilterSidebar, { type Filters } from "@/components/FilterSidebar";
 import CompareSlot from "@/components/CompareSlot";
 import CompareColumnView from "@/components/CompareColumnView";
-import { ComparisonTable } from "@/components/ComparisonTable";
 import {
   decodeShareUrl,
   encodeShareUrl,
@@ -15,6 +14,7 @@ import {
   type CompareColumn,
 } from "@/lib/compareStore";
 import { DEMO_LISTINGS } from "@/lib/demoData";
+import { estLambertToWgs84 } from "@/lib/estdata";
 import { computeScores } from "@/lib/scores";
 import { EMPTY_LIFESTYLE } from "@/lib/lifestyle";
 import dynamic from "next/dynamic";
@@ -104,6 +104,28 @@ export default function Home() {
     setReady(true);
   }, []);
 
+  // Auto-resolve the demo listings on first visit so the page opens with
+  // "active" listings instead of the empty state. Triggered only when
+  // there's no shared URL and no localStorage data. The "Lae 3 näidet"
+  // button in EmptyState handles re-loading after the user clears.
+  const [demosBootstrapped, setDemosBootstrapped] = useState(false);
+  useEffect(() => {
+    if (!ready) return;
+    if (demosBootstrapped) return;
+    if (typeof window === "undefined") return;
+    const params = new URLSearchParams(window.location.search);
+    if (params.get("c")) {
+      setDemosBootstrapped(true);
+      return;
+    }
+    if (loadCompare().length > 0) {
+      setDemosBootstrapped(true);
+      return;
+    }
+    setDemosBootstrapped(true);
+    void loadDemos();
+  }, [ready, demosBootstrapped]);
+
   useEffect(() => {
     if (!ready) return;
     saveCompare(columns);
@@ -141,7 +163,7 @@ export default function Home() {
       if (filters.minOverall && col.scores.overall > 0) {
         if (col.scores.overall < filters.minOverall) return false;
       }
-      if (filters.greenMortgageOnly && col.scores.greenMortgage.score < 4) return false;
+      if (filters.greenMortgageOnly && (col.scores.greenMortgage?.score ?? 0) < 4) return false; // deprecated
       if (filters.minParkStars != null && filters.minParkStars > 0 && col.lifestyle.park.stars < filters.minParkStars) return false;
       if (filters.minSchoolStars != null && filters.minSchoolStars > 0 && col.lifestyle.school.stars < filters.minSchoolStars) return false;
       if (filters.minTransitStars != null && filters.minTransitStars > 0 && col.lifestyle.transit.stars < filters.minTransitStars) return false;
@@ -219,6 +241,12 @@ export default function Home() {
         e = e ? { ...e, energy: [patchedEnergy, ...(e.energy?.slice(1) ?? [])] } : null;
       }
       const lifestyle = (j.lifestyle as CompareColumn["lifestyle"]) ?? EMPTY_LIFESTYLE;
+      // j.picked has WGS84 coords already; cad has L-EST97 that needs conversion
+      const coord = cad
+        ? estLambertToWgs84(cad.tsentroid_x, cad.tsentroid_y)
+        : j.picked
+        ? [j.picked.viitepunkt_l, j.picked.viitepunkt_b]
+        : null;
       const newCol: CompareColumn = {
         id: makeId(),
         input: {
@@ -246,6 +274,8 @@ export default function Home() {
         // may overwrite with live scrape data once the Coolify service
         // is deployed.
         enrichment: manual?.prePopulatedEnrichment ?? null,
+        lat: coord ? coord[1] : null,
+        lon: coord ? coord[0] : null,
         // Stored scores are best-effort (no median yet)
         scores: computeScores({
           c: cad,
@@ -427,6 +457,22 @@ export default function Home() {
     };
   }
 
+  // Resolve all demo listings through the same pipeline the "Lae 3 näidet"
+  // button uses. Called from both the auto-load effect and the EmptyState.
+  async function loadDemos() {
+    for (const ex of DEMO_LISTINGS) {
+      await resolveSlot(ex.raw, {
+        price: ex.price,
+        area: ex.area,
+        rooms: ex.rooms,
+        listingPhoto: ex.photos[0] ?? null,
+        listingUrl: ex.listingUrl,
+        prePopulatedEnrichment: buildDemoEnrichment(ex),
+        ehrEnergyClass: ex.energyClass ?? null,
+      });
+    }
+  }
+
   function removeColumn(id: string) {
     setColumns((prev) => prev.filter((c) => c.id !== id));
   }
@@ -506,9 +552,9 @@ export default function Home() {
           </h1>
           <p className="mt-4 text-muted max-w-prose text-[15px]">
             Sisesta kuni viis aadressi, kv.ee linki või katastri numbrit. Meie koostame
-            kinnistu, ehitise ja energiamärgise andmed kõrvuti ning anname viis skoori:
+            kinnistu, ehitise ja energiamärgise andmed kõrvuti ning anname neli skoori:
             Fair Value (hind vs turu mediaan), TCO (elamiskulud), Appreciation
-            (tuleviku väärtus), Elustiil (naabruskond) ja Rohelaen (rohelaenu sobivus).
+            (tuleviku väärtus) ja Elustiil (naabruskond).
           </p>
         </div>
       </section>
@@ -537,23 +583,7 @@ export default function Home() {
             </div>
 
             {filteredWithScores.length === 0 ? (
-              <EmptyState onTryExample={async () => {
-                // Three real, hand-picked Tallinn listings with verified
-                // kv.ee CDN photos. The story: 3 distinct building types,
-                // 3 districts, 3 price points — shows the comparison axis
-                // doing real work. See src/lib/demoData.ts for sources.
-                for (const ex of DEMO_LISTINGS) {
-                  await resolveSlot(ex.raw, {
-                    price: ex.price,
-                    area: ex.area,
-                    rooms: ex.rooms,
-                    listingPhoto: ex.photos[0] ?? null,
-                    listingUrl: ex.listingUrl,
-                    prePopulatedEnrichment: buildDemoEnrichment(ex),
-                    ehrEnergyClass: ex.energyClass ?? null,
-                  });
-                }
-              }} />
+              <EmptyState onTryExample={loadDemos} />
             ) : (
               <>
                 <div className="flex items-baseline justify-between mb-4">
@@ -581,14 +611,12 @@ export default function Home() {
                       />
                     ))}
                   </div>
+                 </div>
+
+                <div className="mt-8">
+                  <PropertyMap columns={filteredWithScores} />
                 </div>
-               <ComparisonTable columns={filteredWithScores} />
-
-<div className="mt-8">
-  <PropertyMap />
-</div>
-
-</>
+              </>
             )}
           </div>
         </div>
@@ -616,10 +644,9 @@ function EmptyState({ onTryExample }: { onTryExample: () => void }) {
         Sisesta esimene aadress või klõpsa näidet.
       </h3>
       <p className="mt-3 text-muted max-w-prose mx-auto text-[14.5px]">
-        Iga objekt saab viis skoori: <strong>Fair Value</strong> (hind vs turu mediaan),
-        <strong> Elamiskulud</strong> (igakuised kulud küte + elekter), <strong>Väärtuse kasv</strong> (tuleviku väärtus),
-        <strong> Elustiil</strong> (park, kool, transport 1 km raadiuses) ja
-        <strong> Rohelaen</strong> (rohelaenu sobivus 4+).
+        Iga objekt saab neli skoori: <strong>Fair Value</strong> (hind vs turu mediaan),
+        <strong> Elamiskulud</strong> (igakuised kulud küte + elekter), <strong>Väärtuse kasv</strong> (tuleviku väärtus) ja
+        <strong> Elustiil</strong> (park, kool, transport 1 km raadiuses).
       </p>
       <button
         onClick={onTryExample}
