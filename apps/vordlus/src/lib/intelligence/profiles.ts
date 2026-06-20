@@ -89,8 +89,8 @@ export function buildProfilePolicy(
       change: priority > 0 ? "increased" : "decreased",
       message:
         priority > 0
-          ? `${dimension} received more weight because you marked it as important.`
-          : `${dimension} received less weight because you marked it as lower priority.`,
+          ? `${dimension}: suurem kaal, sest märkisid selle oluliseks.`
+          : `${dimension}: väiksem kaal, sest märkisid selle madalamaks prioriteediks.`,
     });
   }
 
@@ -103,7 +103,7 @@ export function buildProfilePolicy(
       reasons.push({
         dimension,
         change: "protected",
-        message: `${dimension} keeps a minimum weight because material risks cannot be ignored.`,
+        message: `${dimension}: minimaalne kaal säilib, sest olulisi riske ei saa eirata.`,
       });
     }
   }

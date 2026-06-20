@@ -390,6 +390,10 @@ git commit -m "feat(intelligence): adapt current property evidence"
 
 ### Task 10: Integrate Profile Onboarding And Score Presentation
 
+**Checkpoint:** Implemented profile storage, homebuyer/investor onboarding, weight explanation, and
+per-listing personalized suitability display. Focused component/storage tests and app type checking
+passed before committing this checkpoint.
+
 **Files:**
 
 - Create: `apps/vordlus/src/components/onboarding/ProfileOnboarding.tsx`
