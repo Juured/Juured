@@ -721,6 +721,23 @@ export default function Home() {
         </div>
       </section>
 
+      <section className="border-t border-rule">
+        <div className="max-w-compare mx-auto px-5 sm:px-8 py-10 sm:py-14">
+          <p className="text-[10.5px] font-semibold uppercase tracking-[0.14em] text-muted">
+            Müüja paketid
+          </p>
+          <h2 className="display mt-3 text-ink text-balance max-w-[44ch]">Igakuine tellimus</h2>
+        </div>
+      </section>
+
+      <section className="max-w-compare mx-auto px-5 sm:px-8 pb-8 lg:pb-12">
+        <div className="max-w-2xl mx-auto grid grid-cols-1 sm:grid-cols-2 gap-4">
+          {PLANS.map((plan) => (
+            <PlanCard key={plan.tier} plan={plan} />
+          ))}
+        </div>
+      </section>
+
       <footer className="border-t border-rule">
         <div className="max-w-compare mx-auto px-5 sm:px-8 py-6 flex flex-col sm:flex-row sm:items-baseline gap-2 justify-between text-[12px] text-muted">
           <p>
@@ -732,6 +749,90 @@ export default function Home() {
         </div>
       </footer>
     </>
+  );
+}
+
+type Plan = {
+  tier: string;
+  price: number;
+  features: string[];
+  inverted?: boolean;
+};
+
+const PLANS: Plan[] = [
+  {
+    tier: "Basic",
+    price: 40,
+    features: [
+      "1 aktiivne kuulutus",
+      "Põhistatistika (vaatamised, klõpsud)",
+      "Kaardil kuvamine",
+    ],
+  },
+  {
+    tier: "Pro",
+    price: 60,
+    features: [
+      "Kuni 5 aktiivset kuulutust",
+      "Täisstatistika + ostjaprofiilid",
+      "Eelisjärjekorras kuvamine",
+    ],
+    inverted: true,
+  },
+];
+
+function PlanCard({ plan }: { plan: Plan }) {
+  const inverted = plan.inverted ?? false;
+
+  return (
+    <div
+      className={
+        inverted
+          ? "border border-ink rounded-lg p-6 bg-ink text-paper"
+          : "border border-rule rounded-lg p-6 bg-paper"
+      }
+    >
+      <p
+        className={
+          inverted
+            ? "text-[10.5px] font-semibold uppercase tracking-[0.14em] text-paper/70"
+            : "text-[10.5px] font-semibold uppercase tracking-[0.14em] text-muted"
+        }
+      >
+        {plan.tier}
+      </p>
+      <p className="mt-3 flex items-baseline gap-1.5">
+        <span className="text-[32px] tabnum font-display">{plan.price}</span>
+        <span className={inverted ? "text-[13px] text-paper/70" : "text-[13px] text-muted"}>
+          €/kuu
+        </span>
+      </p>
+      <ul className="mt-5 space-y-2">
+        {plan.features.map((feature) => (
+          <li
+            key={feature}
+            className={
+              inverted
+                ? "text-[14px] text-paper/90 pl-4 relative before:content-['·'] before:absolute before:left-0"
+                : "text-[14px] text-ink pl-4 relative before:content-['·'] before:absolute before:left-0"
+            }
+          >
+            {feature}
+          </li>
+        ))}
+      </ul>
+      <button
+        type="button"
+        disabled
+        className={
+          inverted
+            ? "mt-6 w-full bg-paper/15 text-paper text-[12px] font-semibold tracking-wider uppercase px-5 py-3 opacity-50 cursor-not-allowed"
+            : "mt-6 w-full bg-ink/10 text-ink text-[12px] font-semibold tracking-wider uppercase px-5 py-3 opacity-50 cursor-not-allowed"
+        }
+      >
+        Start
+      </button>
+    </div>
   );
 }
 
