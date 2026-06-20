@@ -106,7 +106,7 @@ export default function Home() {
 
   // Auto-resolve the demo listings on first visit so the page opens with
   // "active" listings instead of the empty state. Triggered only when
-  // there's no shared URL and no localStorage data. The "Lae 3 näidet"
+  // there's no shared URL and no localStorage data. The "Kuva näidet"
   // button in EmptyState handles re-loading after the user clears.
   const [demosBootstrapped, setDemosBootstrapped] = useState(false);
   useEffect(() => {
@@ -210,6 +210,11 @@ export default function Home() {
       // know it from the listing. Without this, TCO and Rohelaen scores
       // would show "andmed puuduvad".
       ehrEnergyClass?: string | null;
+      // Demo-specific: splice in a full cadastre / EHR record for
+      // buildings the national registers don't have yet. Used for
+      // brand-new construction (Pille tn 11/3, 2019).
+      preBakedCadastre?: CompareColumn["cadastre"];
+      preBakedEhr?: CompareColumn["ehr"];
     },
   ): Promise<{ ok: boolean; error?: string }> {
     if (!raw.trim()) return { ok: false, error: "Sisesta aadress või ID" };
@@ -217,7 +222,21 @@ export default function Home() {
       const r = await fetch("/api/resolve", {
         method: "POST",
         headers: { "Content-Type": "application/json" },
-        body: JSON.stringify({ raw, manual }),
+        body: JSON.stringify({
+          raw,
+          manual: manual
+            ? {
+                price: manual.price,
+                area: manual.area,
+                rooms: manual.rooms,
+                listingPhoto: manual.listingPhoto,
+                listingUrl: manual.listingUrl,
+                ehrEnergyClass: manual.ehrEnergyClass,
+                cadastre: manual.preBakedCadastre ?? undefined,
+                ehr: manual.preBakedEhr ?? undefined,
+              }
+            : undefined,
+        }),
       });
       if (!r.ok) return { ok: false, error: `Server viga: ${r.status}` };
       const j: ResolveResponse = await r.json();
@@ -387,7 +406,7 @@ export default function Home() {
   }
 
   // Build a pre-populated EnrichmentData object from a DemoListing. Used
-  // by the "Lae 3 näidet" button so the enrichment panel shows real
+  // by the "Kuva näidet" button so the enrichment panel shows real
   // values immediately, without waiting for the Coolify scrape service
   // to come online. /api/enrich will still fire in the background and
   // fill in the remaining scrape-dependent blocks (rent yield, liquidity,
@@ -457,7 +476,8 @@ export default function Home() {
     };
   }
 
-  // Resolve all demo listings through the same pipeline the "Lae 3 näidet"
+  // Resolve all demo listings through the same pipeline the "Kuva näidet"
+  // button uses. Called from both the auto-load effect and the EmptyState.
   // button uses. Called from both the auto-load effect and the EmptyState.
   async function loadDemos() {
     for (const ex of DEMO_LISTINGS) {
@@ -469,6 +489,8 @@ export default function Home() {
         listingUrl: ex.listingUrl,
         prePopulatedEnrichment: buildDemoEnrichment(ex),
         ehrEnergyClass: ex.energyClass ?? null,
+        preBakedCadastre: ex.preBakedCadastre,
+        preBakedEhr: ex.preBakedEhr,
       });
     }
   }
@@ -653,7 +675,7 @@ function EmptyState({ onTryExample }: { onTryExample: () => void }) {
         className="mt-6 bg-ink text-paper text-[12px] font-semibold tracking-wider uppercase
                    px-5 py-3 hover:bg-ink/85 transition-colors"
       >
-        Lae 3 näidet (Tallinn)
+        Kuva näidet
       </button>
       <p className="mt-4 text-[11.5px] text-faint">
         Või kleebi oma kv.ee / city24.ee link — meie otsime aadressi URL-ist ja
