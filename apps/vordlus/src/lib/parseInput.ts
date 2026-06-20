@@ -54,14 +54,8 @@ const NAME_FIXES: Record<string, string> = {
   viimsi: "Viimsi",
   saue: "Saue",
   laagri: "Laagri",
-  // city suffixes sometimes left in the slug
+  // city sometimes left in the slug
   tallinn: "Tallinn",
-  // street suffix corrections
-  mnt: "mnt",
-  pst: "pst",
-  tee: "tee",
-  tn: "tn",
-  sk: "sk",
 };
 
 function fixName(token: string): string {
@@ -229,7 +223,7 @@ export function parseUserInput(raw: string): ParsedInput {
   if (TUNNUS_RE.test(text)) return { kind: "tunnus", tunnus: text, raw: text };
 
   // EHR
-  if (EHR_RE.test(text) && /^\d+$/.test(text)) return { kind: "ehr", ehrCode: text, raw: text };
+  if (EHR_RE.test(text)) return { kind: "ehr", ehrCode: text, raw: text };
 
   // free text → address
   return { kind: "address", address: text, raw: text };

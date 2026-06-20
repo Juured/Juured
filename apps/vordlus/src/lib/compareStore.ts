@@ -82,10 +82,10 @@ export function encodeShareUrl(cols: CompareColumn[]): string {
     rooms: c.input.manualRooms ?? null,
     listingPhoto: c.input.manualListingPhoto ?? null,
     listingUrl: c.input.manualListingUrl ?? null,
-    // Preserve the demo's energy class so the recipient's TCO and
-    // Rohelaen scores still compute. Strip the EHR override we applied
-    // in resolveSlot — only the *manual* class is what the user typed
-    // (or the demo button set), so that's what we share.
+    // Share the energy class the recipient's TCO / Rohelaen scores need.
+    // resolveSlot() patches the EHR with the user's manual class (or the
+    // demo's pre-baked class) when the upstream EHR has no certificate, so
+    // reading from c.ehr reflects the value the user actually sees.
     energyClass: c.ehr?.energy?.[0]?.energiaKlass ?? null,
   }));
   if (inputs.length === 0) return "";

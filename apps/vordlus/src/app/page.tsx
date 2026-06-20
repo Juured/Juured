@@ -17,6 +17,7 @@ import { DEMO_LISTINGS } from "@/lib/demoData";
 import { estLambertToWgs84 } from "@/lib/estdata";
 import { computeScores } from "@/lib/scores";
 import { EMPTY_LIFESTYLE } from "@/lib/lifestyle";
+import { normalizeAddress } from "@/lib/addressNorm";
 import dynamic from "next/dynamic";
 
 const PropertyMap = dynamic(() => import("@/components/PropertyMap"), {
@@ -316,10 +317,13 @@ export default function Home() {
 
   async function fetchEnrichmentFor(col: CompareColumn) {
     const addressDisplay = col.cadastre?.tais_aadress || col.ehr?.taisaadress || col.input.raw;
-    const addressNorm = addressDisplay
-      .toLowerCase()
-      .replace(/[^a-z0-9õöäü]+/g, "-")
-      .replace(/^-|-$/g, "");
+    // Defer normalization to the server so we always use the same form
+    // the scrape service expects (lib/addressNorm.ts — MUST match the
+    // scrape-side normalizeAddress in scrape/parsers.js). Sending a
+    // hand-rolled norm here used to disagree with the scrape service
+    // (kept diacritics, kept the district token), which silently made
+    // every non-demo kv.ee URL fail to find its listing in SQLite.
+    const addressNorm = normalizeAddress(addressDisplay);
     const buildYear = col.ehr?.esmaneKasutus ? parseInt(col.ehr.esmaneKasutus, 10) : null;
     const energyClass = col.ehr?.energy?.[0]?.energiaKlass ?? null;
     try {
@@ -494,15 +498,6 @@ export default function Home() {
     url.searchParams.set("c", b64);
     await navigator.clipboard.writeText(url.toString());
     alert("Link kopeeritud!");
-  }
-
-  // Add a column by replacing the empty slot when user clicks a slot button.
-  function setColumnAt(idx: number, col: CompareColumn) {
-    setColumns((prev) => {
-      const next = [...prev];
-      next[idx] = col;
-      return next;
-    });
   }
 
   return (

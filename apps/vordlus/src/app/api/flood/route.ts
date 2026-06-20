@@ -7,18 +7,13 @@ const EGT = "https://gsavalik.envir.ee/geoserver/ows";
 // We render the highest severity found.
 type FloodZone = "ei_ole_ohualas" | "100a_ohualas" | "1000a_ohualas";
 
-const RANK: Record<string, number> = { ei_ole_ohualas: 0, "100a_ohualas": 1, "1000a_ohualas": 2 };
-
-function rankToZone(rank: number): FloodZone {
-  if (rank >= 2) return "1000a_ohualas";
-  if (rank >= 1) return "100a_ohualas";
-  return "ei_ole_ohualas";
-}
-
 function tyypToZone(raw: string | null | undefined): FloodZone {
   if (!raw) return "ei_ole_ohualas";
   const t = raw.toLowerCase();
-  if (t.includes("1000") || t.includes("1%") || t.includes("0.1")) return "1000a_ohualas";
+  // 1000-year: 0.1% annual exceedance ("0.1%") or the "1000a" string code.
+  // 100-year: 1% annual exceedance ("1%") or the "100a" string code.
+  // 1% is the canonical marker for 100-year — do NOT classify it as 1000-year.
+  if (t.includes("1000") || t.includes("0.1%")) return "1000a_ohualas";
   if (t.includes("100") || t.includes("1%")) return "100a_ohualas";
   return "ei_ole_ohualas";
 }
@@ -50,15 +45,16 @@ export async function GET(req: NextRequest) {
       );
     }
     const j = (await r.json()) as { features?: { properties?: { tyyp?: string } }[] };
-    let bestRank = 0;
+    // Pick the highest-severity zone. We compare as strings in a fixed
+    // order: ei_ole_ohualas < 100a_ohualas < 1000a_ohualas.
+    const ORDER: Record<FloodZone, number> = { ei_ole_ohualas: 0, "100a_ohualas": 1, "1000a_ohualas": 2 };
+    let best: FloodZone = "ei_ole_ohualas";
     for (const f of j.features ?? []) {
       const z = tyypToZone(f.properties?.tyyp);
-      const rk = RANK[z] ?? 0;
-      if (rk > bestRank) bestRank = rk;
+      if (ORDER[z] > ORDER[best]) best = z;
     }
-    const zone = rankToZone(bestRank);
     return NextResponse.json(
-      { data: { zone }, source: "eelis:kr_yleujutusohuga_ala", error: null },
+      { data: { zone: best }, source: "eelis:kr_yleujutusohuga_ala", error: null },
       { headers: { "Cache-Control": "public, s-maxage=2592000, stale-while-revalidate=2592000" } },
     );
   } catch (e) {
