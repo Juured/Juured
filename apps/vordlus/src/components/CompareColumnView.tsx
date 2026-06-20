@@ -204,11 +204,6 @@ export default function CompareColumnView({ column, index, medianPriceM2, onRemo
             </>
           )}
         </p>
-        {unitKind === "multi" && (
-          <p className="mt-1.5 text-[10.5px] text-warn leading-snug">
-            Korterelamu — sisesta oma korteri andmed lahtris #{String(index + 1).padStart(2, "0")}.
-          </p>
-        )}
         {/* Listing link (kv.ee / city24 / kinnisvara24 / cke.ee) — shown
             when the raw input is a URL OR the demo button set a manual
             listingUrl (e.g. the 3 demo listings have manualListingUrl

@@ -105,7 +105,7 @@ async function fetchListingPhoto(req: NextRequest, listingUrl: string): Promise<
 }
 
 export async function POST(req: NextRequest) {
-  let body: { raw?: string; manual?: { cadastre?: CadastreRecord; ehr?: EhrBuilding } };
+  let body: { raw?: string; manual?: { cadastre?: CadastreRecord; ehr?: EhrBuilding; estpropMedian?: number } };
   try {
     body = await req.json();
   } catch {
@@ -222,9 +222,23 @@ export async function POST(req: NextRequest) {
     // them in here so the lifestyle lookup and building panel work.
     if (body.manual?.cadastre) out.cadastre = body.manual.cadastre;
     if (body.manual?.ehr) out.ehr = body.manual.ehr;
+    // Demo override: explicit district median (€/m²) for the Fair Value
+    // baseline. The auto-derived municipality median from Maa-amet is
+    // too coarse for a demo where the user is comparing three apartments
+    // in the same district — we want the Kesklinn-specific number.
+    if (body.manual?.estpropMedian != null && out.cadastre) {
+      out.cadastre.estprop_median_eur_m2 = body.manual.estpropMedian;
+    }
 
     if (out.cadastre && out.cadastre.estprop_median_eur_m2 == null) {
-      const omv = out.cadastre.tais_aadress.split(",").map((s) => s.trim()).slice(-1)[0] ?? null;
+      // Prefer the municipality from the In-AKS picked address (e.g. "Tallinn")
+      // over the last address part (e.g. "Harjumaa" county) — the median map
+      // is keyed by municipality. Falls back to address parsing for safety.
+      const omv =
+        (out.picked && (out.picked as { omavalitsus?: string }).omavalitsus) ||
+        out.cadastre.tais_aadress.split(",").map((s) => s.trim()).slice(-2, -1)[0] ||
+        out.cadastre.tais_aadress.split(",").map((s) => s.trim()).slice(-1)[0] ||
+        null;
       out.cadastre.estprop_median_eur_m2 = estpropMedianFor(omv);
     }
 

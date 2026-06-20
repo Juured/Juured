@@ -170,8 +170,13 @@ export function appreciationScore(
     score = 2;
     reason = "nõuk. aegne paneelmaja, kõrge energiakulu";
   } else if (historical && eff) {
-    score = 2;
-    reason = "väga vana, kuid renoveeritud";
+    // Pre-1960 + A/B/C energy class = the building has been renovated
+    // (you can't get a C without facade/insulation/heating upgrades on
+    // a 1950s shell). That's the best kind of appreciation story in
+    // Tallinn's old town — protected facade, modern systems, scarce
+    // supply. Score 3, not 2.
+    score = 3;
+    reason = "ajalooline, kuid renoveeritud (A-C energia­märgis)";
   } else {
     score = 1;
     reason = "väga vana, kõrge hoolduskulu risk";
