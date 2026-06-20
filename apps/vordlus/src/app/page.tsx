@@ -26,6 +26,33 @@ const PropertyMap = dynamic(() => import("@/components/PropertyMap"), {
 
 const MAX_SLOTS = 5;
 
+const DATA_SOURCE_ITEMS: { title: string; body: string }[] = [
+  {
+    title: "Aadress ja kinnistu",
+    body: "Maa-ameti In-AKS leiab sisestatud aadressi, ADS-i ja koordinaadid. Katastri avalik X-tee teenus annab katastritunnuse, maa sihtotstarbe, pindala ja seotud katastriandmed.",
+  },
+  {
+    title: "Ehitis ja energia",
+    body: "Ehitisregistrist tulevad hoone andmed: ehitusaasta, kasutus, korrused, pind, energiamärgis ja muud väljad, kui need on registris olemas.",
+  },
+  {
+    title: "Naabruskond",
+    body: "OpenStreetMap Overpass ja Maa-ameti huvipunktide kiht annavad läheduses olevad pargid, koolid, poed, kohvikud, restoranid, spordikohad ja peatused.",
+  },
+  {
+    title: "Transport",
+    body: "Ühistranspordi läheduse hindamisel kasutatakse GTFS peatuste andmeid ning loetakse peatused valitud raadiuses.",
+  },
+  {
+    title: "Planeeringud ja riskid",
+    body: "NordAPI/PLANK annab lähedased planeeringud. Keskkonna geoserveri kihid annavad radooni- ja üleujutusriski, kui asukoha kohta on andmeid.",
+  },
+  {
+    title: "Kuulutused",
+    body: "kv.ee, city24.ee ja kinnisvara24.ee lingid on parima pingutuse põhimõttel. Fotod ja kuulutuse lisainfo tulevad ainult siis, kui eraldi scrape-teenus on seadistatud.",
+  },
+];
+
 type ResolveResponse = {
   input: { raw: string; kind: string };
   picked: { viitepunkt_l: number; viitepunkt_b: number; pikkaadress: string } | null;
@@ -654,17 +681,10 @@ export default function Home() {
               </p>
             </div>
             <div className="grid gap-4 sm:grid-cols-2">
-              {[
-                ["Aadress ja kinnistu", "Maa-ameti In-AKS leiab sisestatud aadressi, ADS-i ja koordinaadid. Katastri avalik X-tee teenus annab katastritunnuse, maa sihtotstarbe, pindala ja seotud katastriandmed."],
-                ["Ehitis ja energia", "Ehitisregistrist tulevad hoone andmed: ehitusaasta, kasutus, korrused, pind, energiamärgis ja muud väljad, kui need on registris olemas."],
-                ["Naabruskond", "OpenStreetMap Overpass ja Maa-ameti huvipunktide kiht annavad läheduses olevad pargid, koolid, poed, kohvikud, restoranid, spordikohad ja peatused."],
-                ["Transport", "Ühistranspordi läheduse hindamisel kasutatakse GTFS peatuste andmeid ning loetakse peatused valitud raadiuses."],
-                ["Planeeringud ja riskid", "NordAPI/PLANK annab lähedased planeeringud. Keskkonna geoserveri kihid annavad radooni- ja üleujutusriski, kui asukoha kohta on andmeid."],
-                ["Kuulutused", "kv.ee, city24.ee ja kinnisvara24.ee lingid on parima pingutuse põhimõttel. Fotod ja kuulutuse lisainfo tulevad ainult siis, kui eraldi scrape-teenus on seadistatud."],
-              ].map(([title, body]) => (
-                <div key={title} className="border border-rule bg-paper p-4">
-                  <h3 className="text-[13px] font-semibold uppercase tracking-[0.12em] text-ink">{title}</h3>
-                  <p className="mt-2 text-[13px] leading-6 text-muted">{body}</p>
+              {DATA_SOURCE_ITEMS.map((item) => (
+                <div key={item.title} className="border border-rule bg-paper p-4">
+                  <h3 className="text-[13px] font-semibold uppercase tracking-[0.12em] text-ink">{item.title}</h3>
+                  <p className="mt-2 text-[13px] leading-6 text-muted">{item.body}</p>
                 </div>
               ))}
             </div>
