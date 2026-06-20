@@ -311,30 +311,60 @@ export default function CompareColumnView({ column, index, medianPriceM2, onRemo
       <div className="border-t border-rule">
         <table className="w-full text-[11.5px]">
           <tbody>
-            <Row label="Ehitise liik" value={e?.nimetus ?? "—"} />
-            <Row label="Esmakasutus" value={fmtYear(e?.esmaneKasutus)} />
-            <Row label="Energiamärgis" value={<EnergyPill k={e?.energy[0]?.energiaKlass ?? null} />} />
-            <Row
-              label="Korruseid"
-              value={e?.maxKorrusteArv != null ? `${e.maxKorrusteArv}` : "—"}
-            />
-            <Row
-              label="Hoone netopind"
-              value={e?.suletud_netopind != null ? `${e.suletud_netopind.toLocaleString("et-EE")} m²` : "—"}
-              hint={unitKind === "multi" ? "kogu hoone" : undefined}
-            />
-            <Row
-              label="Küte"
-              value={e?.energy[0]?.kytteTyypTxt ?? "—"}
-            />
-            <Row label="Omandivorm" value={c?.omvorm ?? "—"} />
-            <Row
-              label="Maksustamisväärtus"
-              value={c?.maks_hind != null ? fmtMoney(c.maks_hind) : "—"}
-              hint="Maa-amet 2022"
-            />
-            <Row label="Katastri nr" value={c?.tunnus ?? "—"} mono />
-            <Row label="EHR kood" value={e?.ehr_code ?? "—"} mono />
+<Row
+  label="Ehitise liik TEST"
+  value={e?.nimetus ?? "—"}
+  info="Näitab hoone tüüpi või kasutusotstarvet EHR andmete järgi, näiteks üksikelamu, korterelamu või ärihoone."
+/>
+<Row
+  label="Esmakasutus"
+  value={fmtYear(e?.esmaneKasutus)}
+  info="Aasta, millal hoone esimest korda kasutusele võeti. See aitab hinnata hoone vanust."
+/>
+<Row
+  label="Energiamärgis"
+  value={<EnergyPill k={e?.energy[0]?.energiaKlass ?? null} />}
+  info="Energiaklass näitab, kui energiatõhus hoone on. A-klass on üldiselt parem kui madalamad klassid."
+/>
+<Row
+  label="Korruseid"
+  value={e?.maxKorrusteArv != null ? `${e.maxKorrusteArv}` : "—"}
+  info="Näitab, mitu korrust hoonel EHR andmete järgi on."
+/>
+<Row
+  label="Hoone netopind"
+  value={e?.suletud_netopind != null ? `${e.suletud_netopind.toLocaleString("et-EE")} m²` : "—"}
+  hint={unitKind === "multi" ? "kogu hoone" : undefined}
+  info="Suletud netopind on hoone kasutatav sisepind ruutmeetrites. Korterelamu puhul võib see tähendada kogu maja pinda, mitte ainult ühte korterit."
+/>
+<Row
+  label="Küte"
+  value={e?.energy[0]?.kytteTyypTxt ?? "—"}
+  info="Näitab peamist kütteliiki EHR andmete järgi, näiteks kaugküte, elektriküte või ahiküte."
+/>
+<Row
+  label="Omandivorm"
+  value={c?.omvorm ?? "—"}
+  info="Näitab kinnistu omandivormi katastriandmete järgi."
+/>
+<Row
+  label="Maksustamisväärtus"
+  value={c?.maks_hind != null ? fmtMoney(c.maks_hind) : "—"}
+  hint="Maa-amet 2022"
+  info="Maa-ameti määratud maksustamisväärtus. See ei ole sama mis turuhind või müügihind."
+/>
+<Row
+  label="Katastri nr"
+  value={c?.tunnus ?? "—"}
+  mono
+  info="Katastritunnus on kinnistu unikaalne number maakatastris."
+/>
+<Row
+  label="EHR kood"
+  value={e?.ehr_code ?? "—"}
+  mono
+  info="EHR kood on hoone unikaalne tunnus Ehitisregistris."
+/>
           </tbody>
         </table>
       </div>
@@ -346,14 +376,39 @@ export default function CompareColumnView({ column, index, medianPriceM2, onRemo
   );
 }
 
-function Row({ label, value, mono = false, hint }: { label: string; value: React.ReactNode; mono?: boolean; hint?: string }) {
+function Row({
+  label,
+  value,
+  mono = false,
+  hint,
+  info,
+}: {
+  label: string;
+  value: React.ReactNode;
+  mono?: boolean;
+  hint?: string;
+  info?: string;
+}) {
   return (
     <tr className="border-b border-rule last:border-b-0">
       <td className="px-4 py-2.5 text-muted align-top whitespace-nowrap">
-        {label}
+        <span className="inline-flex items-center gap-1">
+          {label}
+          {info && (
+            <span
+              title={info}
+              aria-label={info}
+              className="inline-flex h-4 w-4 items-center justify-center rounded-full bg-blue-600 text-[10px] font-bold text-white cursor-help"
+            >
+              ?
+            </span>
+          )}
+        </span>
         {hint && <p className="text-[9.5px] text-faint mt-0.5">{hint}</p>}
       </td>
-      <td className={`px-4 py-2.5 text-right text-ink align-top ${mono ? "font-mono text-[11px]" : ""}`}>{value}</td>
+      <td className={`px-4 py-2.5 text-right text-ink align-top ${mono ? "font-mono text-[11px]" : ""}`}>
+        {value}
+      </td>
     </tr>
   );
 }
