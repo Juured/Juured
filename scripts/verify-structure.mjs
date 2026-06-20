@@ -29,12 +29,14 @@ const requiredFiles = [
   ".github/workflows/release.yml",
   "docs/AGENT_WORKFLOW.md",
   "docs/ARCHITECTURE.md",
+  "docs/TEAM_BRIEF_ALIGNMENT.md",
   "docs/CONTRIBUTOR_WORKFLOW.md",
   "docs/RELEASE_PROCESS.md",
   "docs/REPOSITORY_SETTINGS.md",
   "docs/SECURITY_CONTROLS.md",
   "docs/adr/0000-template.md",
   "docs/adr/0001-repository-foundation.md",
+  "docs/adr/0002-agent-market-intelligence-architecture.md",
 ];
 
 const missing = requiredFiles.filter((file) => !existsSync(file));
