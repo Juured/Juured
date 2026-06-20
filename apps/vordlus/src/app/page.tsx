@@ -540,6 +540,9 @@ export default function Home() {
             <span className="hidden sm:inline text-[12px] text-muted ml-2">· Kinnisvara võrdlus</span>
           </a>
           <nav className="flex items-center gap-5 text-[13px] text-ink">
+            <a href="/contact" className="hover:text-accent transition-colors">
+              Kontakt
+            </a>
             <button
               onClick={shareUrl}
               disabled={columns.length === 0}
@@ -644,7 +647,42 @@ export default function Home() {
         </div>
       </section>
 
-      <footer className="border-t border-rule mt-12">
+      <section className="border-t border-rule bg-paperDeep/45">
+        <div className="max-w-compare mx-auto px-5 sm:px-8 py-10 sm:py-12">
+          <div className="grid gap-8 lg:grid-cols-[minmax(0,0.8fr)_minmax(0,1.2fr)] lg:items-start">
+            <div>
+              <p className="text-[10.5px] font-semibold uppercase tracking-[0.14em] text-muted">Andmete päritolu</p>
+              <h2 className="display-tight mt-3 text-[26px] text-ink">Kust andmed tulevad</h2>
+              <p className="mt-3 text-[14.5px] text-muted max-w-prose">
+                Võrdlus ei ole kinnisvararegister ega maakler. Rakendus koondab avalikud
+                registri-, kaardi- ja keskkonnaandmed ning arvutab nende põhjal võrdlusskoorid.
+              </p>
+            </div>
+            <div className="grid gap-4 sm:grid-cols-2">
+              {[
+                ["Aadress ja kinnistu", "Maa-ameti In-AKS leiab sisestatud aadressi, ADS-i ja koordinaadid. Katastri avalik X-tee teenus annab katastritunnuse, maa sihtotstarbe, pindala ja seotud katastriandmed."],
+                ["Ehitis ja energia", "Ehitisregistrist tulevad hoone andmed: ehitusaasta, kasutus, korrused, pind, energiamärgis ja muud väljad, kui need on registris olemas."],
+                ["Naabruskond", "OpenStreetMap Overpass ja Maa-ameti huvipunktide kiht annavad läheduses olevad pargid, koolid, poed, kohvikud, restoranid, spordikohad ja peatused."],
+                ["Transport", "Ühistranspordi läheduse hindamisel kasutatakse GTFS peatuste andmeid ning loetakse peatused valitud raadiuses."],
+                ["Planeeringud ja riskid", "NordAPI/PLANK annab lähedased planeeringud. Keskkonna geoserveri kihid annavad radooni- ja üleujutusriski, kui asukoha kohta on andmeid."],
+                ["Kuulutused", "kv.ee, city24.ee ja kinnisvara24.ee lingid on parima pingutuse põhimõttel. Fotod ja kuulutuse lisainfo tulevad ainult siis, kui eraldi scrape-teenus on seadistatud."],
+              ].map(([title, body]) => (
+                <div key={title} className="border border-rule bg-paper p-4">
+                  <h3 className="text-[13px] font-semibold uppercase tracking-[0.12em] text-ink">{title}</h3>
+                  <p className="mt-2 text-[13px] leading-6 text-muted">{body}</p>
+                </div>
+              ))}
+            </div>
+          </div>
+          <p className="mt-6 text-[12px] leading-6 text-faint max-w-4xl">
+            Hinna, elamiskulude, tulevikuväärtuse ja elustiili skoorid on arvutuslikud ning sõltuvad
+            sisestatud hinnast, pindalast ja registrites leiduvatest andmetest. Enne ostuotsust kontrolli
+            olulised faktid alati algallikatest või pädeva spetsialistiga.
+          </p>
+        </div>
+      </section>
+
+      <footer className="border-t border-rule">
         <div className="max-w-compare mx-auto px-5 sm:px-8 py-6 flex flex-col sm:flex-row sm:items-baseline gap-2 justify-between text-[12px] text-muted">
           <p>
             <span className="font-display text-ink">võrdlus</span> · Ehitatud vabade Eesti
