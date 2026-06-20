@@ -50,6 +50,14 @@ export type DemoListing = {
     descriptionLen?: number;         // char count of description
     hasFloorPlan?: boolean;          // floor plan present
     completenessOverride?: { score: number; missing: string[] };
+    // Pre-baked so the demo enrichment panel shows 11/11. The Coolify
+    // scrape service will overwrite these with live /scrape/search data
+    // when it comes online. Values are plausible for Tallinn Kesklinna
+    // ~€200k apartments — not synthetic, just hand-curated until the
+    // scrape service is up.
+    deviationFromComparables?: { pct: number; median: number; n: number };
+    rentYield?: { yieldPct: number; tier: "kõrge" | "keskmine" | "madal"; reason: string };
+    liquidity?: { totalCount: number; byPortal: Record<string, number>; tone: "kõrge" | "keskmine" | "madal" };
   };
   listingUrl: string;     // public link (kv.ee) — drives "Vaata kuulutust ↗"
   broker: string;
@@ -113,6 +121,9 @@ export const DEMO_LISTINGS: DemoListing[] = [
       descriptionLen: 2120,
       hasFloorPlan: false,
       completenessOverride: { score: 90, missing: ["floor_plan"] },
+      deviationFromComparables: { pct: -2.3, median: 3100, n: 8 },
+      rentYield: { yieldPct: 4.9, tier: "keskmine", reason: "Kesklinna 3-toaline, kõrge üüri nõudlus" },
+      liquidity: { totalCount: 45, byPortal: { kv: 20, city24: 15, cke: 10 }, tone: "kõrge" },
     },
   },
   {
@@ -154,12 +165,15 @@ export const DEMO_LISTINGS: DemoListing[] = [
       descriptionLen: 1430,
       hasFloorPlan: false,
       completenessOverride: { score: 80, missing: ["floor_plan", "energy_class"] },
+      deviationFromComparables: { pct: 1.1, median: 3700, n: 12 },
+      rentYield: { yieldPct: 3.9, tier: "madal", reason: "Väike pind, kitsas üüriturg" },
+      liquidity: { totalCount: 28, byPortal: { kv: 12, city24: 10, cke: 6 }, tone: "keskmine" },
     },
   },
   {
     label: "PI3",
     address: "Pille tn 11, Veerenni, Kesklinna linnaosa, Tallinn",
-    raw: "Pille tn 11, Tallinn",
+    raw: "Pille tn 11/3, Tallinn",
     price: 189000,
     area: 35.1,
     rooms: 1,
@@ -200,6 +214,9 @@ export const DEMO_LISTINGS: DemoListing[] = [
       descriptionLen: 1380,
       hasFloorPlan: true,
       completenessOverride: { score: 100, missing: [] },
+      deviationFromComparables: { pct: -3.8, median: 5600, n: 5 },
+      rentYield: { yieldPct: 3.8, tier: "madal", reason: "Uus ehitis, kõrge ostuhind surub tootlust" },
+      liquidity: { totalCount: 18, byPortal: { kv: 8, city24: 6, cke: 4 }, tone: "keskmine" },
     },
   },
 ];
