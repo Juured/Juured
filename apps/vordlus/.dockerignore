@@ -1,0 +1,21 @@
+# Next.js standalone build context
+node_modules
+.next
+.git
+.gitignore
+.env
+.env.*
+!.env.example
+*.log
+README.md
+docs
+.DS_Store
+.vscode
+.idea
+coverage
+.nyc_output
+scrape/node_modules
+scrape/.npm
+out
+.vercel
+*.tsbuildinfo

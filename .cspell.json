@@ -1,7 +1,16 @@
 {
   "version": "0.2",
   "language": "en",
-  "ignorePaths": ["node_modules", "package-lock.json", ".git", "coverage", "dist", "build"],
+  "ignorePaths": [
+    "node_modules",
+    "package-lock.json",
+    ".git",
+    "coverage",
+    "dist",
+    "build",
+    "apps/vordlus",
+    "services/vordlus-scrape"
+  ],
   "words": [
     "accDescr",
     "accTitle",
@@ -23,6 +32,8 @@
     "Baltics",
     "nullstate",
     "reposted",
-    "reposting"
+    "reposting",
+    "Vordlus",
+    "vordlus"
   ]
 }

@@ -1,0 +1,110 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+@import url("https://fonts.googleapis.com/css2?family=Fraunces:opsz,wght,SOFT@9..144,300..900,0..100&family=Inter+Tight:wght@300;400;500;600;700&family=JetBrains+Mono:wght@400;500&display=swap");
+
+:root { color-scheme: light; }
+
+html, body {
+  background: #F7F7F7;
+  color: #1A1A1A;
+  font-family: "Inter Tight", ui-sans-serif, system-ui, sans-serif;
+  font-feature-settings: "ss01", "cv11", "kern";
+  text-rendering: optimizeLegibility;
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+  line-height: 1.55;
+}
+
+::selection { background: #1A1A1A; color: #F7F7F7; }
+
+.eyebrow {
+  font-family: "Inter Tight", system-ui, sans-serif;
+  font-size: 10.5px;
+  font-weight: 600;
+  letter-spacing: 0.14em;
+  text-transform: uppercase;
+  color: #6B6F6A;
+}
+
+.tabnum { font-variant-numeric: tabular-nums; }
+
+.display {
+  font-family: "Fraunces", ui-serif, Georgia, serif;
+  font-variation-settings: "opsz" 144, "SOFT" 50;
+  font-weight: 380;
+  letter-spacing: -0.025em;
+  line-height: 1.02;
+}
+
+.display-tight {
+  font-family: "Fraunces", ui-serif, Georgia, serif;
+  font-variation-settings: "opsz" 96, "SOFT" 50;
+  font-weight: 420;
+  letter-spacing: -0.02em;
+  line-height: 1.08;
+}
+
+/* Accordion chevron rotation */
+details > summary { list-style: none; cursor: pointer; }
+details > summary::-webkit-details-marker { display: none; }
+details[open] .chevron { transform: rotate(90deg); }
+.chevron { transition: transform 0.15s ease; }
+
+/* Star shape for the matrix */
+.star-on { color: #1A1A1A; }
+.star-off { color: #D4D2C8; }
+
+/* Hide scrollbars on horizontal scrollers on mobile */
+.no-scrollbar::-webkit-scrollbar { display: none; }
+.no-scrollbar { -ms-overflow-style: none; scrollbar-width: none; }
+
+/* Reduced motion */
+@media (prefers-reduced-motion: reduce) {
+  * { animation-duration: 0.01ms !important; transition-duration: 0.01ms !important; }
+}
+
+/* Focus rings */
+:focus-visible {
+  outline: 2px solid #1A1A1A;
+  outline-offset: 2px;
+}
+input:focus, button:focus, select:focus, textarea:focus, a:focus { outline: none; }
+
+/* Property photo placeholder — a calm architectural illustration */
+.photo {
+  background:
+    linear-gradient(135deg, rgba(255,255,255,0.04) 0 50%, transparent 50%),
+    linear-gradient(45deg, rgba(0,0,0,0.05) 0 50%, transparent 50%),
+    #c8c2b6;
+}
+.photo-warm { background:
+    linear-gradient(135deg, rgba(255,255,255,0.05) 0 50%, transparent 50%),
+    linear-gradient(45deg, rgba(0,0,0,0.04) 0 50%, transparent 50%),
+    #d4c8b4;
+}
+.photo-cool { background:
+    linear-gradient(135deg, rgba(255,255,255,0.05) 0 50%, transparent 50%),
+    linear-gradient(45deg, rgba(0,0,0,0.05) 0 50%, transparent 50%),
+    #b6bcc1;
+}
+.photo-stone { background:
+    linear-gradient(135deg, rgba(255,255,255,0.05) 0 50%, transparent 50%),
+    linear-gradient(45deg, rgba(0,0,0,0.05) 0 50%, transparent 50%),
+    #a8a59c;
+}
+
+/* Risk badges (radon / flood) */
+.risk-pill {
+  font-size: 10px;
+  font-weight: 600;
+  letter-spacing: 0.06em;
+  text-transform: uppercase;
+  padding: 3px 7px;
+  border: 1px solid #E5E4DD;
+  color: #1A1A1A;
+}
+.risk-pill.ok { background: #f0fdf4; border-color: #bbf7d0; color: #166534; }
+.risk-pill.warn { background: #fffbeb; border-color: #fde68a; color: #B45309; }
+.risk-pill.bad { background: #fef2f2; border-color: #fecaca; color: #9A1B1B; }
