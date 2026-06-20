@@ -24,14 +24,14 @@ type PoiItem = {
 // Warm muted palette — every hue sits in the cream/taupe/ochre family
 // so the map doesn't punch a hole in the editorial aesthetic.
 const CATEGORY_COLOR: Record<PoiCategory, string> = {
-  park: "#5C7A3F",          // warm leaf green
-  school: "#5C6D6D",        // slate
-  kindergarten: "#8C6D4F",  // brand ochre
-  gym: "#8B5A3F",           // terracotta
-  transit: "#6D7A8C",       // slate blue
-  shop: "#A88A4F",          // sand
-  cafe: "#8B5A5A",          // dusty rose
-  restaurant: "#A8623F",    // burnt sienna
+  park: "#22C55E",          // roheline
+  school: "#3B82F6",        // sinine
+  kindergarten: "#F97316",  // oranž
+  gym: "#EF4444",           // punane
+  transit: "#8B5CF6",       // lilla
+  shop: "#EAB308",          // kollane
+  cafe: "#EC4899",          // roosa
+  restaurant: "#14B8A6",    // türkiis
 };
 
 const CATEGORY_LABEL: Record<PoiCategory, string> = {
