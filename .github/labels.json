@@ -1,5 +1,10 @@
 [
   {
+    "name": "agent:handoff",
+    "color": "6741d9",
+    "description": "Work that needs continuation by another teammate or agent"
+  },
+  {
     "name": "area:ci",
     "color": "0b7285",
     "description": "Continuous integration, repository automation, or checks"
@@ -58,6 +63,11 @@
     "name": "needs:decision",
     "color": "f08c00",
     "description": "Needs maintainer direction before implementation"
+  },
+  {
+    "name": "needs:coordination",
+    "color": "f59f00",
+    "description": "Requires coordination across teammates, agents, or branches"
   },
   {
     "name": "priority:high",

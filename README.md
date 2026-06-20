@@ -117,6 +117,19 @@ See [docs/ARCHITECTURE.md](docs/ARCHITECTURE.md) for the complete foundation arc
 | `.github/workflows/release.yml`    | Creates GitHub releases from semantic version tags                  |
 | `.github/dependabot.yml`           | Opens update PRs for npm packages and GitHub Actions                |
 
+## Agent Collaboration
+
+This repository includes shared instructions for teammates using Codex, Claude Code, Cursor, or
+similar coding agents:
+
+- `AGENTS.md` for repository-wide agent rules.
+- `CLAUDE.md` for Claude Code entry-point instructions.
+- `.cursor/rules/juured-agent-workflow.mdc` for Cursor agents.
+- `docs/AGENT_WORKFLOW.md` for issue-based progress tracking and handoffs.
+
+Agents should use GitHub issues and PRs as the progress log instead of creating separate tracking
+systems.
+
 ## Quickstart
 
 ```bash

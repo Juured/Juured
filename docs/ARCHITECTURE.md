@@ -104,6 +104,7 @@ The repository is deliberately split into five visible areas:
 | Knowledge          | Help judges and teammates understand the project quickly            | `README.md`, `docs/`                                   |
 | Governance         | Define collaboration, ownership, conduct, and security expectations | `CONTRIBUTING.md`, `SECURITY.md`, `.github/CODEOWNERS` |
 | Automation         | Keep checks repeatable in PRs and on `main`                         | `.github/workflows/`, `.github/dependabot.yml`         |
+| Agent coordination | Keep Codex, Claude Code, Cursor, and teammate handoffs aligned      | `AGENTS.md`, `CLAUDE.md`, `.cursor/rules/`, issues     |
 | Local verification | Let contributors run CI-style checks before pushing                 | `package.json`, `scripts/`                             |
 | Future product     | Reserved boundaries for real app, service, package, and infra code  | `apps/`, `services/`, `packages/`, `infra/`            |
 
@@ -145,6 +146,18 @@ folders increase merge conflict surface without adding clarity.
 | `.github/workflows/labels.yml`     | Manual or label config change on `main` | Syncs labels from `.github/labels.json`                        |
 | `.github/workflows/release.yml`    | Semantic version tags or manual         | Creates a GitHub release with generated notes                  |
 | `.github/dependabot.yml`           | Weekly                                  | Opens update PRs for npm and GitHub Actions                    |
+
+## Agent Coordination
+
+AI coding agents must follow the same repository map as human contributors:
+
+- `AGENTS.md` is the shared instruction entry point.
+- `CLAUDE.md` forwards Claude Code users to the same rules.
+- `.cursor/rules/juured-agent-workflow.mdc` gives Cursor the same constraints.
+- `docs/AGENT_WORKFLOW.md` defines issue-based progress tracking and handoff notes.
+
+The repository intentionally uses GitHub issues and pull requests as the progress log. This prevents
+multiple agents from editing one shared status file and creating unnecessary merge conflicts.
 
 ## Decision Rules
 

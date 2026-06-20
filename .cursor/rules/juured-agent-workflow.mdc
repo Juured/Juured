@@ -1,0 +1,25 @@
+---
+description: Juured repository workflow and collaboration rules for Cursor agents
+alwaysApply: true
+---
+
+# Juured Agent Workflow
+
+Follow the shared repository instructions in `AGENTS.md`.
+
+Before changing structure or adding product code, read:
+
+- `README.md`
+- `docs/ARCHITECTURE.md`
+- `docs/AGENT_WORKFLOW.md`
+
+Rules:
+
+- Use GitHub issues as the progress tracker.
+- Keep work scoped to one issue or objective per branch.
+- Update the issue or PR with progress, blockers, changed files, checks, and handoff notes.
+- Do not create empty `apps/`, `packages/`, `services/`, or `infra/` directories.
+- Do not create a second architecture or progress-tracking system.
+- Add an ADR under `docs/adr/` for stack choices, shared interfaces, deployment boundaries, or
+  architecture changes.
+- Run `npm run verify` before handing work to another collaborator.

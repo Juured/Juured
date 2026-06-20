@@ -3,6 +3,7 @@ area:docs:
       - any-glob-to-any-file:
           - "**/*.md"
           - "docs/**"
+          - ".cursor/rules/**"
 
 area:ci:
   - changed-files:
@@ -27,3 +28,11 @@ type:documentation:
   - changed-files:
       - any-glob-to-any-file:
           - "**/*.md"
+
+agent:handoff:
+  - changed-files:
+      - any-glob-to-any-file:
+          - "AGENTS.md"
+          - "CLAUDE.md"
+          - ".cursor/rules/**"
+          - "docs/AGENT_WORKFLOW.md"

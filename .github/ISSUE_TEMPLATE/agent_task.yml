@@ -1,0 +1,54 @@
+name: Agent coordination task
+description: Track work that needs AI-agent or teammate coordination.
+title: "agent: "
+labels:
+  - needs:decision
+  - agent:handoff
+body:
+  - type: textarea
+    id: objective
+    attributes:
+      label: Objective
+      description: What should this agent or teammate accomplish?
+    validations:
+      required: true
+  - type: textarea
+    id: context
+    attributes:
+      label: Context
+      description: What should the next collaborator read first?
+      placeholder: |
+        - README.md
+        - docs/ARCHITECTURE.md
+        - Related issue or PR:
+    validations:
+      required: true
+  - type: textarea
+    id: scope
+    attributes:
+      label: Scope
+      description: What is included and excluded?
+    validations:
+      required: true
+  - type: textarea
+    id: architecture
+    attributes:
+      label: Architecture impact
+      description: Does this affect apps, packages, services, infra, docs, or CI?
+  - type: textarea
+    id: blockers
+    attributes:
+      label: Blockers or decisions needed
+      placeholder: |
+        - [ ] ...
+  - type: textarea
+    id: handoff
+    attributes:
+      label: Handoff notes
+      description: Fill this before another collaborator continues.
+      placeholder: |
+        Current objective:
+        Changed files:
+        Verification:
+        Open decisions:
+        Suggested next step:
