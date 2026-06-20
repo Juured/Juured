@@ -398,7 +398,7 @@ function Row({
             <span
               title={info}
               aria-label={info}
-              className="inline-flex h-4 w-4 items-center justify-center rounded-full bg-blue-600 text-[10px] font-bold text-white cursor-help"
+              className="inline-flex h-4 w-4 items-center justify-center rounded-full bg-[#DDEFE8] text-[10px] font-bold text-[#4F7C6B] cursor-help"
             >
               ?
             </span>
