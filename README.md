@@ -132,12 +132,23 @@ systems.
 
 ```bash
 npm ci
-npm run verify
+npm ci --prefix apps/vordlus
+npm run dev
 ```
 
-The repository currently validates documentation, workflow files, package metadata, spelling,
-formatting, and required structure. Application-specific commands should be added to
-`npm run verify` once the product stack is selected.
+Open [http://localhost:3011](http://localhost:3011).
+
+Run repository and application checks from the repository root:
+
+```bash
+npm run verify
+npm run typecheck:app
+npm run test:app
+npm run build:app
+```
+
+The root scripts delegate application commands to `apps/vordlus`, while `npm run verify` validates
+documentation, workflow files, package metadata, spelling, formatting, and required structure.
 
 ## Collaborating
 

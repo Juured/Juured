@@ -6,7 +6,7 @@
 
 ## Stack
 
-- **Next.js 14** (App Router) + TypeScript
+- **Next.js 15** (App Router) + TypeScript
 - **Tailwind CSS** with custom warm-grey Nordic palette
 - **Fraunces** (display serif) + **Inter Tight** (body) + **JetBrains Mono** (numbers)
 - **4 serverless API routes** for CORS-safe same-origin proxying
@@ -27,10 +27,13 @@ The comparison fetches data **per address**: In-AKS → building → kadastritun
 ## How to run
 
 ```bash
-npm install
+npm ci
 npm run dev
 # open http://localhost:3011
 ```
+
+From the repository root, install with `npm ci --prefix apps/vordlus` and start with
+`npm run dev`.
 
 ## Project layout
 

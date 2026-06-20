@@ -2,6 +2,33 @@
 @tailwind components;
 @tailwind utilities;
 
+.property-map-pin {
+  background: transparent;
+  border: 0;
+}
+
+.property-map-pin span {
+  position: relative;
+  display: block;
+  width: 24px;
+  height: 24px;
+  border: 3px solid #ffffff;
+  border-radius: 50% 50% 50% 0;
+  background: #b42318;
+  box-shadow: 0 2px 8px rgb(15 23 42 / 28%);
+  transform: rotate(-45deg);
+}
+
+.property-map-pin span::after {
+  content: "";
+  position: absolute;
+  width: 6px;
+  height: 6px;
+  border-radius: 50%;
+  background: #ffffff;
+  transform: translate(6px, 6px);
+}
+
 @import url("https://fonts.googleapis.com/css2?family=Fraunces:opsz,wght,SOFT@9..144,300..900,0..100&family=Inter+Tight:wght@300;400;500;600;700&family=JetBrains+Mono:wght@400;500&display=swap");
 
 :root { color-scheme: light; }
