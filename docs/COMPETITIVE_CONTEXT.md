@@ -118,6 +118,8 @@ listings into comparable evidence.
 
 ### Listing Comparison Metrics
 
+- Overall listing market score.
+- Realistic pricing score: how well the asking price matches comparable market evidence.
 - Price per square meter.
 - Deviation from comparable listings.
 - District or neighborhood benchmark.
@@ -129,6 +131,28 @@ listings into comparable evidence.
 - Floor, building age, room count, area, and property-type normalization.
 - Rent-versus-sale yield where rental data exists.
 - Local supply/liquidity: how many similar listings are active nearby.
+
+### Overall Market Score
+
+The platform should consider an overall score for each listing that summarizes whether the listing
+looks attractive, realistic, overpriced, underpriced, risky, stale, or incomplete based on available
+data.
+
+Potential score inputs:
+
+- Comparable listings in the same location and property segment.
+- Price per square meter versus local distribution bands.
+- Recent price changes and price-reduction history.
+- Time on market compared with similar listings.
+- Duplicate-listing evidence across portals or agencies.
+- Listing completeness and source freshness.
+- Energy class, renovation state, building age, floor, room count, and area normalization.
+- Local supply/liquidity for similar properties.
+- Rental yield or investor signal where rental data exists.
+
+The score should be explainable. Users should see the reasons behind the score, such as "priced 11%
+above similar active listings nearby," "stale compared with local median time on market," or
+"duplicate source shows a lower asking price."
 
 ### Market Movement Metrics
 
