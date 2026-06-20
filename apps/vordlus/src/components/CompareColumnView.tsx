@@ -10,6 +10,8 @@ import { RiskBadges } from "@/components/RiskBadges";
 import { PlaneeringuRadar } from "@/components/PlaneeringuRadar";
 import { EnrichmentPanel } from "@/components/EnrichmentPanel";
 import { LoanCalculator } from "@/components/LoanCalculator";
+import { PersonalizedScoreBadge } from "@/components/intelligence/PersonalizedScoreBadge";
+import type { UserProfile } from "@/lib/intelligence/profiles";
 
 const Icon = ({ d, size = 14 }: { d: string; size?: number }) => (
   <svg
@@ -87,10 +89,21 @@ type Props = {
   column: CompareColumn;
   index: number;
   medianPriceM2: number | null;
+  personalized?: {
+    profile: UserProfile;
+    score: number;
+    confidence: number;
+  } | null;
   onRemove: () => void;
 };
 
-export default function CompareColumnView({ column, index, medianPriceM2, onRemove }: Props) {
+export default function CompareColumnView({
+  column,
+  index,
+  medianPriceM2,
+  personalized,
+  onRemove,
+}: Props) {
   const c = column.cadastre;
   const e = column.ehr;
   const addr = c?.tais_aadress || e?.taisaadress || column.input.raw;
@@ -188,6 +201,14 @@ export default function CompareColumnView({ column, index, medianPriceM2, onRemo
           onRemove={onRemove}
         />
       </div>
+
+      {personalized && (
+        <PersonalizedScoreBadge
+          profile={personalized.profile}
+          score={personalized.score}
+          confidence={personalized.confidence}
+        />
+      )}
 
       {/* Name + location */}
       <div className="px-4 pt-3.5 pb-3">

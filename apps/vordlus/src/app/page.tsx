@@ -18,6 +18,11 @@ import { estLambertToWgs84 } from "@/lib/estdata";
 import { computeScores } from "@/lib/scores";
 import { EMPTY_LIFESTYLE } from "@/lib/lifestyle";
 import { normalizeAddress } from "@/lib/addressNorm";
+import { ProfileWeightExplanation } from "@/components/intelligence/ProfileWeightExplanation";
+import { ProfileOnboarding } from "@/components/onboarding/ProfileOnboarding";
+import { evaluateCurrentColumn } from "@/lib/intelligence/fromCurrentData";
+import { loadUserProfile } from "@/lib/intelligence/profileStore";
+import { buildProfilePolicy, type UserProfile } from "@/lib/intelligence/profiles";
 import dynamic from "next/dynamic";
 
 const PropertyMap = dynamic(() => import("@/components/PropertyMap"), {
@@ -70,6 +75,7 @@ type ResolveResponse = {
 export default function Home() {
   const [columns, setColumns] = useState<CompareColumn[]>([]);
   const [filters, setFilters] = useState<Filters>({});
+  const [userProfile, setUserProfile] = useState<UserProfile | null>(null);
   const [ready, setReady] = useState(false);
   // Demo-button loading state. `demoStatus` is keyed by monogram label
   // (TM24, LE7, PI3) so the EmptyState can show per-listing progress as
@@ -81,6 +87,7 @@ export default function Home() {
   // Load from localStorage + URL share
   useEffect(() => {
     if (typeof window === "undefined") return;
+    setUserProfile(loadUserProfile());
     const params = new URLSearchParams(window.location.search);
     const shared = params.get("c");
       if (shared) {
@@ -232,6 +239,21 @@ export default function Home() {
       return { ...col, scores: liveScores };
     });
   }, [filtered, medianPriceM2]);
+
+  const profilePolicy = useMemo(
+    () => (userProfile ? buildProfilePolicy(userProfile, {}) : null),
+    [userProfile],
+  );
+
+  const intelligenceByColumn = useMemo(() => {
+    if (!profilePolicy) return new Map<string, ReturnType<typeof evaluateCurrentColumn>>();
+    return new Map(
+      filteredWithScores.map((col) => [
+        col.id,
+        evaluateCurrentColumn(col, profilePolicy),
+      ]),
+    );
+  }, [filteredWithScores, profilePolicy]);
 
   async function resolveSlot(
     raw: string,
@@ -632,6 +654,7 @@ export default function Home() {
             Fair Value (hind vs turu mediaan), TCO (elamiskulud), Appreciation
             (tuleviku väärtus) ja Elustiil (naabruskond).
           </p>
+          <ProfileOnboarding profile={userProfile} onSelect={setUserProfile} />
         </div>
       </section>
 
@@ -666,6 +689,7 @@ export default function Home() {
               />
             ) : (
               <>
+                {profilePolicy && <ProfileWeightExplanation policy={profilePolicy} />}
                 <div className="flex items-baseline justify-between mb-4">
                   <h2 className="display-tight text-[22px] text-ink">
                     Võrdlus · <span className="text-faint">{filteredWithScores.length} objekti</span>
@@ -687,6 +711,18 @@ export default function Home() {
                         column={col}
                         index={i}
                         medianPriceM2={medianPriceM2}
+                        personalized={
+                          profilePolicy
+                            ? {
+                                profile: profilePolicy.profile,
+                                score:
+                                  intelligenceByColumn.get(col.id)?.scores.personalizedSuitability ??
+                                  0,
+                                confidence:
+                                  intelligenceByColumn.get(col.id)?.scores.confidence ?? 0,
+                              }
+                            : null
+                        }
                         onRemove={() => removeColumn(col.id)}
                       />
                     ))}

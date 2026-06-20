@@ -1,5 +1,4 @@
 import { describe, it, expect, beforeEach, afterEach, vi } from "vitest";
-import nock from "nock";
 
 const SCRAPE = "http://localhost:3000";
 
@@ -44,13 +43,51 @@ async function callHandler(body: unknown) {
   return { status: res.status, body: await res.json() };
 }
 
+type ScrapeResponse = Record<string, unknown>;
+
+function mockScrapeFetch(responses: {
+  listing?: ScrapeResponse;
+  sale?: ScrapeResponse;
+  rent?: ScrapeResponse;
+  fail?: boolean;
+}) {
+  vi.stubGlobal(
+    "fetch",
+    vi.fn(async (input: string | URL | Request, init?: RequestInit) => {
+      if (responses.fail) {
+        return { ok: false, status: 502, json: async () => ({}) };
+      }
+
+      const url =
+        typeof input === "string"
+          ? input
+          : input instanceof URL
+            ? input.toString()
+            : input.url;
+      const path = new URL(url).pathname;
+      const payload = init?.body ? JSON.parse(String(init.body)) : {};
+
+      if (path === "/scrape/listing" && responses.listing) {
+        return { ok: true, status: 200, json: async () => responses.listing };
+      }
+      if (path === "/scrape/search" && payload.type === "sale" && responses.sale) {
+        return { ok: true, status: 200, json: async () => responses.sale };
+      }
+      if (path === "/scrape/search" && payload.type === "rent" && responses.rent) {
+        return { ok: true, status: 200, json: async () => responses.rent };
+      }
+
+      return { ok: false, status: 404, json: async () => ({}) };
+    }),
+  );
+}
+
 describe("POST /api/enrich", () => {
   beforeEach(() => {
-    nock.cleanAll();
     process.env.SCRAPE_SERVICE_URL = SCRAPE;
   });
   afterEach(() => {
-    nock.cleanAll();
+    vi.unstubAllGlobals();
     delete process.env.SCRAPE_SERVICE_URL;
   });
 
@@ -78,9 +115,8 @@ describe("POST /api/enrich", () => {
   });
 
   it("returns full enrichment when kv.ee link is given", async () => {
-    nock(SCRAPE)
-      .post("/scrape/listing")
-      .reply(200, {
+    mockScrapeFetch({
+      listing: {
         id: "kv-1",
         first_seen_at: Date.now() - 42 * 86_400_000,
         daysOnMarket: 42,
@@ -89,10 +125,8 @@ describe("POST /api/enrich", () => {
           { date: Date.now() - 14 * 86_400_000, price: 420000 },
         ],
         current: { price_eur: 420000, area_m2: 199, rooms: 5, energy_class: "D", build_year: 1970, photo_count: 12, description_len: 1450, has_floor_plan: true },
-      });
-    nock(SCRAPE)
-      .post("/scrape/search")
-      .reply(200, {
+      },
+      sale: {
         address_norm: "viljandi-mnt-47-tallinn",
         type: "sale",
         totalCount: 12,
@@ -102,10 +136,8 @@ describe("POST /api/enrich", () => {
           { id: "kv-2", price_eur: 380000, area_m2: 180, rooms: 4, price_per_m2: 2111, daysOnMarket: 30, energy_class: "C" },
         ],
         stats: { median_price_eur: 400000, median_price_per_m2: 2110, p25_price_per_m2: 1750, p75_price_per_m2: 2400 },
-      });
-    nock(SCRAPE)
-      .post("/scrape/search")
-      .reply(200, {
+      },
+      rent: {
         address_norm: "viljandi-mnt-47-tallinn",
         type: "rent",
         totalCount: 5,
@@ -114,7 +146,8 @@ describe("POST /api/enrich", () => {
           { id: "kv-r1", price_eur: 1500, area_m2: 80, rooms: 3, price_per_m2: 18.75 },
         ],
         stats: { median_price_eur: 1500, median_price_per_m2: 18.75, p25_price_per_m2: 16, p75_price_per_m2: 22 },
-      });
+      },
+    });
 
     const { status, body } = await callHandler({
       raw: "https://www.kv.ee/3995056",
@@ -134,8 +167,7 @@ describe("POST /api/enrich", () => {
   });
 
   it("returns 200 with errors when scrape service is down", async () => {
-    nock(SCRAPE).post("/scrape/listing").reply(502);
-    nock(SCRAPE).post("/scrape/search").reply(502);
+    mockScrapeFetch({ fail: true });
     const { status, body } = await callHandler({
       raw: "https://www.kv.ee/1",
       addressDisplay: "X",
