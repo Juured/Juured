@@ -5,6 +5,8 @@
   "description": "Repository foundation for Juured.",
   "license": "UNLICENSED",
   "scripts": {
+    "build:app": "npm --prefix apps/vordlus run build",
+    "dev": "npm --prefix apps/vordlus run dev",
     "format": "prettier --write .",
     "format:check": "prettier --check .",
     "labels:sync": "node scripts/sync-labels.mjs",
@@ -12,6 +14,8 @@
     "lint:package": "sort-package-json --check package.json",
     "lint:spelling": "cspell . --no-progress --show-suggestions",
     "lint:structure": "node scripts/verify-structure.mjs",
+    "test:app": "npm --prefix apps/vordlus run test",
+    "typecheck:app": "npm --prefix apps/vordlus run typecheck",
     "verify": "npm run lint:docs && npm run lint:package && npm run lint:spelling && npm run lint:structure && npm run format:check"
   },
   "devDependencies": {
