@@ -225,7 +225,7 @@ export default function PropertyMap({ columns = [] }: { columns?: CompareColumn[
   }, [mapReady, poiItems, points]);
 
   return (
-    <section className="border border-rule bg-paper2/40">
+    <section className="border border-rule">
       <div className="flex items-center justify-between gap-4 border-b border-rule px-4 py-3">
         <div>
           <h2 className="text-[10.5px] font-semibold uppercase tracking-[0.14em] text-muted">
@@ -243,7 +243,7 @@ export default function PropertyMap({ columns = [] }: { columns?: CompareColumn[
       <div className="relative h-[420px] min-h-[320px] w-full">
         <div ref={mapRootRef} className="h-full w-full" aria-label="Kinnisvara asukohtade kaart" />
         {error && (
-          <div className="absolute inset-0 z-[500] grid place-items-center bg-paper2/90 px-6 text-center text-sm text-muted">
+          <div className="absolute inset-0 z-[500] grid place-items-center bg-paper/90 px-6 text-center text-sm text-muted">
             {error}
           </div>
         )}

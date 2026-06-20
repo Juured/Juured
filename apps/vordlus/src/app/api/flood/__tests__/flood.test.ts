@@ -50,4 +50,33 @@ describe("GET /api/flood", () => {
     const body = await res.json();
     expect(body.data.zone).toBe("1000a_ohualas");
   });
+
+  it("classifies '1%' as 100a_ohualas (the 100-year marker, NOT 1000-year)", async () => {
+    // '1%' is the canonical marker for 100-year return period (1% annual
+    // exceedance). Previously this was misclassified as 1000a_ohualas.
+    nock(EGT).get(/geoserver\/ows/).reply(200, {
+      features: [{ properties: { tyyp: "1% tõenäosusega üleujutusala" } }],
+    });
+    const res = await GET(makeReq(59.5, 24.7));
+    const body = await res.json();
+    expect(body.data.zone).toBe("100a_ohualas");
+  });
+
+  it("classifies '0.1%' as 1000a_ohualas (the 1000-year marker)", async () => {
+    nock(EGT).get(/geoserver\/ows/).reply(200, {
+      features: [{ properties: { tyyp: "0.1% tõenäosusega üleujutusala" } }],
+    });
+    const res = await GET(makeReq(59.5, 24.7));
+    const body = await res.json();
+    expect(body.data.zone).toBe("1000a_ohualas");
+  });
+
+  it("treats missing tyyp as ei_ole_ohualas (graceful null)", async () => {
+    nock(EGT).get(/geoserver\/ows/).reply(200, {
+      features: [{ properties: {} }, { properties: { tyyp: "100a" } }],
+    });
+    const res = await GET(makeReq(59.5, 24.7));
+    const body = await res.json();
+    expect(body.data.zone).toBe("100a_ohualas");
+  });
 });

@@ -1,8 +1,5 @@
-// Lifestyle scoring — combines deterministic baseline (cadastral id + build
-// year) with live OpenStreetMap POI data (when available) for accurate
-// neighborhood scoring.
-
-import type { CadastreRecord, EhrBuilding } from "./estdata";
+// Lifestyle scoring — combines live OpenStreetMap / Maa-amet POI counts
+// for accurate neighborhood scoring.
 
 export type LifestyleKey = "park" | "school" | "gym" | "transit" | "shop" | "cafe" | "restaurant";
 
@@ -19,42 +16,6 @@ export const LIFESTYLE_LABELS: Record<LifestyleKey, string> = {
 };
 
 export const LIFESTYLE_STAR_LABELS = ["", "halb", "nõrk", "keskmine", "hea", "suurepärane"];
-
-// Deterministic baseline — used as fallback when POI data is unavailable.
-function deterministic(c: CadastreRecord | null, e: EhrBuilding | null): Lifestyle {
-  const seed = (c?.tunnus ?? e?.ehr_code ?? "x")
-    .split("")
-    .reduce((a, ch) => (a * 31 + ch.charCodeAt(0)) >>> 0, 7);
-  function rng(i: number) {
-    let s = seed ^ (i * 2654435761);
-    s = (s ^ (s >>> 16)) >>> 0;
-    return ((s * 2246822519) >>> 0) / 0xffffffff;
-  }
-  const built = e?.esmaneKasutus
-    ? parseInt(e.esmaneKasutus, 10)
-    : e?.ehAlustKp
-      ? parseInt(String(e.ehAlustKp).slice(0, 4), 10)
-      : null;
-  const ageBonus: Partial<Record<LifestyleKey, number>> = built
-    ? built < 1950
-      ? { park: 1, transit: -1 }
-      : built < 1990
-        ? {}
-        : built > 2010
-          ? { gym: 1, transit: 1 }
-          : {}
-    : {};
-  function scoreFor(key: LifestyleKey): number {
-    const base = 2 + Math.floor(rng(key.charCodeAt(0) + key.length) * 4);
-    return Math.max(1, Math.min(5, base + (ageBonus[key] ?? 0)));
-  }
-  const k: LifestyleKey[] = ["park", "school", "gym", "transit", "shop", "cafe", "restaurant"];
-  const out = {} as Lifestyle;
-  for (const key of k) {
-    out[key] = { stars: scoreFor(key), label: `${scoreFor(key)}/5`, count: 0 };
-  }
-  return out;
-}
 
 export function lifestyleFromPOI(
   poi: Partial<Record<LifestyleKey, { count: number; stars: number; label: string }>>,

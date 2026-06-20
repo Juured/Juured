@@ -129,7 +129,11 @@ export async function POST(req: NextRequest) {
   };
 
   const { raw, addressDisplay, addressNorm, wgs84, manualPrice, manualArea, manualRooms } = body;
-  const norm = addressNorm || normalizeAddress(addressDisplay);
+  // Always re-normalize server-side. The client's addressNorm (when
+  // present) used to be hand-rolled with a different algorithm and
+  // didn't match the scrape-side normalizeAddress in scrape/parsers.js,
+  // which silently broke the lookup for every non-demo kv.ee URL.
+  normalizeAddress(addressDisplay);
   const isKvUrl = /kv\.ee|city24\.ee|kinnisvara24\.ee/i.test(raw);
 
   if (manualPrice != null && manualArea != null && manualArea > 0) {
