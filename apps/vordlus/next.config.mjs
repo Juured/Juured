@@ -1,7 +1,13 @@
+import path from "node:path";
+import { fileURLToPath } from "node:url";
+
+const appDir = path.dirname(fileURLToPath(import.meta.url));
+
 /** @type {import('next').NextConfig} */
 const nextConfig = {
   reactStrictMode: true,
   output: "standalone",
+  outputFileTracingRoot: path.join(appDir, "../.."),
   images: { remotePatterns: [{ protocol: "https", hostname: "**" }] },
   // When set, all asset URLs (CSS, JS) get prefixed with this path.
   // Used so the site also works behind /vordlus/* path-based access.
