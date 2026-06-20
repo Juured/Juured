@@ -9,6 +9,7 @@ import { Monogram } from "@/components/Monogram";
 import { RiskBadges } from "@/components/RiskBadges";
 import { PlaneeringuRadar } from "@/components/PlaneeringuRadar";
 import { EnrichmentPanel } from "@/components/EnrichmentPanel";
+import { LoanCalculator } from "@/components/LoanCalculator";
 
 const Icon = ({ d, size = 14 }: { d: string; size?: number }) => (
   <svg
@@ -154,9 +155,9 @@ export default function CompareColumnView({ column, index, medianPriceM2, onRemo
     diffVsMedian == null
       ? undefined
       : diffVsMedian > 0.05
-        ? "#9A1B1B"
+        ? "var(--up)"
         : diffVsMedian < -0.05
-          ? "#166534"
+          ? "var(--down)"
           : undefined;
 
   // Whether the user still owes us data
@@ -173,7 +174,7 @@ export default function CompareColumnView({ column, index, medianPriceM2, onRemo
   ];
 
   return (
-    <div className="bg-white border border-rule overflow-hidden flex flex-col">
+    <div className="bg-paperDeep border border-rule overflow-hidden flex flex-col">
       {/* Monogram (typographic identity for the property) */}
       <div className="relative">
         <PhotoFor
@@ -345,6 +346,7 @@ export default function CompareColumnView({ column, index, medianPriceM2, onRemo
 
       <RiskBadges radon={column.radon} flood={column.flood} />
       <EnrichmentPanel data={column.enrichment} />
+      <LoanCalculator propertyPrice={price} />
     </div>
   );
 }

@@ -31,11 +31,40 @@
 
 @import url("https://fonts.googleapis.com/css2?family=Fraunces:opsz,wght,SOFT@9..144,300..900,0..100&family=Inter+Tight:wght@300;400;500;600;700&family=JetBrains+Mono:wght@400;500&display=swap");
 
-:root { color-scheme: light; }
+:root {
+  color-scheme: light;
+  /* Surfaces */
+  --paper: #FDFBF7;
+  --paper-deep: #F7F4EF;
+  --field: #FBF8F2;
+  /* Text */
+  --ink: #1E1E1E;
+  --ink-deep: #111111;
+  --muted: #7A7268;
+  --faint: #A8A094;
+  /* Borders */
+  --rule: #E6E1DA;
+  --rule2: #C8C2BA;
+  /* Brand */
+  --accent: #8C6D4F;
+  --accent-soft: #A88A6B;
+  --accent-ink: #5C4530;
+  --accent-tint: #F4ECDF;
+  /* Data viz */
+  --sand: #E8DCC8;
+  --sand-deep: #C9B79A;
+  --sand-ink: #7A6347;
+  /* Status */
+  --up: #8B2929;
+  --down: #3F6B3F;
+  --good: #3F6B3F;
+  --warn: #A87A3F;
+  --bad: #8B2929;
+}
 
 html, body {
-  background: #F7F7F7;
-  color: #1A1A1A;
+  background: var(--paper);
+  color: var(--ink);
   font-family: "Inter Tight", ui-sans-serif, system-ui, sans-serif;
   font-feature-settings: "ss01", "cv11", "kern";
   text-rendering: optimizeLegibility;
@@ -44,7 +73,7 @@ html, body {
   line-height: 1.55;
 }
 
-::selection { background: #1A1A1A; color: #F7F7F7; }
+::selection { background: var(--ink); color: var(--paper); }
 
 .eyebrow {
   font-family: "Inter Tight", system-ui, sans-serif;
@@ -52,7 +81,7 @@ html, body {
   font-weight: 600;
   letter-spacing: 0.14em;
   text-transform: uppercase;
-  color: #6B6F6A;
+  color: var(--muted);
 }
 
 .tabnum { font-variant-numeric: tabular-nums; }
@@ -80,8 +109,8 @@ details[open] .chevron { transform: rotate(90deg); }
 .chevron { transition: transform 0.15s ease; }
 
 /* Star shape for the matrix */
-.star-on { color: #1A1A1A; }
-.star-off { color: #D4D2C8; }
+.star-on { color: var(--ink); }
+.star-off { color: var(--rule2); }
 
 /* Hide scrollbars on horizontal scrollers on mobile */
 .no-scrollbar::-webkit-scrollbar { display: none; }
@@ -94,44 +123,45 @@ details[open] .chevron { transform: rotate(90deg); }
 
 /* Focus rings */
 :focus-visible {
-  outline: 2px solid #1A1A1A;
+  outline: 2px solid var(--ink);
   outline-offset: 2px;
 }
 input:focus, button:focus, select:focus, textarea:focus, a:focus { outline: none; }
 
-/* Property photo placeholder — a calm architectural illustration */
+/* Property photo placeholder — calm, warm architectural backgrounds.
+   Stay within the cream/taupe/ochre family. Never pure white. */
 .photo {
   background:
     linear-gradient(135deg, rgba(255,255,255,0.04) 0 50%, transparent 50%),
     linear-gradient(45deg, rgba(0,0,0,0.05) 0 50%, transparent 50%),
-    #c8c2b6;
+    var(--rule2);
 }
 .photo-warm { background:
     linear-gradient(135deg, rgba(255,255,255,0.05) 0 50%, transparent 50%),
     linear-gradient(45deg, rgba(0,0,0,0.04) 0 50%, transparent 50%),
-    #d4c8b4;
+    #D4C8B8;
 }
 .photo-cool { background:
     linear-gradient(135deg, rgba(255,255,255,0.05) 0 50%, transparent 50%),
     linear-gradient(45deg, rgba(0,0,0,0.05) 0 50%, transparent 50%),
-    #b6bcc1;
+    #B6B8BA;
 }
 .photo-stone { background:
     linear-gradient(135deg, rgba(255,255,255,0.05) 0 50%, transparent 50%),
     linear-gradient(45deg, rgba(0,0,0,0.05) 0 50%, transparent 50%),
-    #a8a59c;
+    var(--faint);
 }
 
-/* Risk badges (radon / flood) */
+/* Risk badges (radon / flood) — warm tints, not Tailwind alert palette */
 .risk-pill {
   font-size: 10px;
   font-weight: 600;
   letter-spacing: 0.06em;
   text-transform: uppercase;
   padding: 3px 7px;
-  border: 1px solid #E5E4DD;
-  color: #1A1A1A;
+  border: 1px solid var(--rule);
+  color: var(--ink);
 }
-.risk-pill.ok { background: #f0fdf4; border-color: #bbf7d0; color: #166534; }
-.risk-pill.warn { background: #fffbeb; border-color: #fde68a; color: #B45309; }
-.risk-pill.bad { background: #fef2f2; border-color: #fecaca; color: #9A1B1B; }
+.risk-pill.ok { background: #F0F4E8; border-color: #C9D6A8; color: var(--good); }
+.risk-pill.warn { background: #F7F0E0; border-color: #E8D8B8; color: var(--warn); }
+.risk-pill.bad { background: #FBF0EB; border-color: #E8C8B8; color: var(--bad); }
