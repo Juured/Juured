@@ -184,3 +184,11 @@ AI should explain and orchestrate. The system should compute.
 - Which market score inputs are feasible in the first version?
 - Which official/open datasets are available for Estonian market baselines?
 - Which data retention rules apply to raw listing snapshots and media?
+
+## Detailed Design
+
+The accepted scoring, personalization, risk-rule, data-universe, visualization and implementation
+contracts are documented in:
+
+- `docs/plans/2026-06-20-personalized-property-intelligence-design.md`
+- `docs/plans/2026-06-20-personalized-property-intelligence-implementation-plan.md`
