@@ -1,0 +1,3 @@
+# False positive: localStorage namespace, not a credential.
+a6002c3e981f4d3965f2010fdfa3cc408d45a22c:apps/vordlus/src/lib/compareStore.ts:generic-api-key:38
+a53361a142522f02d101aca42147af320cfb1b73:src/lib/compareStore.ts:generic-api-key:25
