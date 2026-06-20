@@ -18,6 +18,8 @@
     "Ruum",
     "SARIF",
     "Scorecard",
-    "nullstate"
+    "nullstate",
+    "reposted",
+    "reposting"
   ]
 }

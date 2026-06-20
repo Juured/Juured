@@ -110,6 +110,66 @@ Good technical depth candidates:
      statistical modules.
    - Show intermediate artifacts so judges can inspect the system.
 
+## Candidate Metrics And Signals
+
+These are strong product ideas to preserve for the structured project brief. They make the platform
+useful for buyers, analysts, brokers, and other real estate decision-makers because they turn raw
+listings into comparable evidence.
+
+### Listing Comparison Metrics
+
+- Price per square meter.
+- Deviation from comparable listings.
+- District or neighborhood benchmark.
+- Similar-property price band.
+- Listing completeness score.
+- Missing or suspicious field indicators.
+- Energy class comparison.
+- Renovation or condition signal.
+- Floor, building age, room count, area, and property-type normalization.
+- Rent-versus-sale yield where rental data exists.
+- Local supply/liquidity: how many similar listings are active nearby.
+
+### Market Movement Metrics
+
+- Price-change history.
+- Time on market.
+- Reposted listing detection.
+- Price-reduction frequency.
+- Status changes such as active, reserved, removed, rented, or sold when observable.
+- Supply by district, property type, room count, and listing status.
+- Price-per-square-meter distribution bands over time.
+
+### Duplicate Listing Detection As A Feature
+
+Duplicate listings should not only be treated as a data-cleaning problem. They can become a useful
+comparison signal.
+
+If the same property appears across multiple portals or agencies, the system can compare:
+
+- Price differences between duplicate listings.
+- Description differences.
+- Photo differences.
+- Agency or broker differences.
+- Timestamp and freshness differences.
+- Whether one source has more complete data than another.
+- Whether a duplicate was reposted or relisted after a price change.
+
+This creates a defensible product advantage: the platform can explain that two or more listings are
+likely the same property, show why they were matched, and use the duplicates to improve confidence
+in price, availability, and listing quality.
+
+Good duplicate-matching signals:
+
+- Address hints and normalized location.
+- Coordinates or map area.
+- Area, floor, room count, and building details.
+- Price and price-per-square-meter similarity.
+- Image fingerprints or perceptual image similarity.
+- Text similarity across titles and descriptions.
+- Broker, agency, or contact patterns.
+- Listing timestamps and reposting behavior.
+
 ## Early Product Framing
 
 Avoid:
