@@ -166,3 +166,15 @@ multiple agents from editing one shared status file and creating unnecessary mer
 - Keep local verification and CI aligned through `npm run verify`.
 - Use `.github/ISSUE_TEMPLATE/decision.yml` when a decision needs team alignment before coding.
 - Copy `docs/adr/0000-template.md` when documenting accepted architecture decisions.
+
+## Product Implementation
+
+The first product import adds real implementation files under the previously documented boundaries:
+
+| Path                       | Purpose                                                                                             |
+| -------------------------- | --------------------------------------------------------------------------------------------------- |
+| `apps/vordlus/`            | Next.js 14 App Router application for Estonian property comparison                                  |
+| `services/vordlus-scrape/` | Node.js and Playwright listing-photo scraping service for deployments that need VPS-origin requests |
+| `vercel.json`              | Root deployment configuration that points Vercel at the imported Next.js app                        |
+
+See [ADR 0003](docs/adr/0003-vordlus-next-app-import.md) for the import decision.

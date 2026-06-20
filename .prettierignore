@@ -4,3 +4,5 @@ dist/
 build/
 package-lock.json
 
+apps/vordlus/
+services/vordlus-scrape/

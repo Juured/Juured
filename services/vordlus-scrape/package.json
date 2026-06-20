@@ -1,0 +1,23 @@
+{
+  "name": "vordlus-scrape",
+  "version": "0.1.0",
+  "private": true,
+  "description": "Headless scrape service for kv.ee / city24.ee listing photos. Runs on a VPS IP to bypass Cloudflare gating that hits Vercel edge IPs.",
+  "main": "server.js",
+  "type": "commonjs",
+  "engines": {
+    "node": ">=20"
+  },
+  "scripts": {
+    "start": "node server.js",
+    "dev": "node server.js"
+  },
+  "dependencies": {
+    "express": "^4.21.2",
+    "playwright": "^1.49.0",
+    "sql.js": "^1.14.1"
+  },
+  "devDependencies": {
+    "vitest": "^1.6.1"
+  }
+}
