@@ -105,7 +105,7 @@ async function fetchListingPhoto(req: NextRequest, listingUrl: string): Promise<
 }
 
 export async function POST(req: NextRequest) {
-  let body: { raw?: string };
+  let body: { raw?: string; manual?: { cadastre?: CadastreRecord; ehr?: EhrBuilding } };
   try {
     body = await req.json();
   } catch {
@@ -215,6 +215,13 @@ export async function POST(req: NextRequest) {
     }
 
     if (out.picked == null && addr) out.picked = addr;
+
+    // Demo override: if the caller (loadDemos) pre-baked cadastre/EHR
+    // (because the In-AKS / EHR lookup returned null for a building that
+    // exists on kv.ee but isn't in the national registers yet), splice
+    // them in here so the lifestyle lookup and building panel work.
+    if (body.manual?.cadastre) out.cadastre = body.manual.cadastre;
+    if (body.manual?.ehr) out.ehr = body.manual.ehr;
 
     if (out.cadastre && out.cadastre.estprop_median_eur_m2 == null) {
       const omv = out.cadastre.tais_aadress.split(",").map((s) => s.trim()).slice(-1)[0] ?? null;

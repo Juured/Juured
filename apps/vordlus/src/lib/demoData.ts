@@ -1,6 +1,6 @@
 // Hackathon demo listings — 3 hand-picked, currently active Tallinn
 // Kesklinna apartments around the €200k mark. These are loaded by both the
-// "Lae 3 näidet (Tallinn)" button on the empty state and the first-visit
+// "Kuva näidet" button on the empty state and the first-visit
 // auto-resolve effect.
 //
 // Sources (all verified live as of 2026-06-20):
@@ -63,6 +63,13 @@ export type DemoListing = {
   broker: string;
   photos: string[];       // ordered, [0] = main, [1+] = gallery
   story: string;          // one-line narrative
+  // Pre-baked cadastre + EHR for buildings the national registers don't
+  // have yet (e.g. brand-new 2019 construction). When present, the
+  // /api/resolve endpoint uses these instead of querying In-AKS / EHR
+  // — the lookup returns null for some Veerenni-area new builds, which
+  // would leave the building panel and lifestyle lookup empty.
+  preBakedCadastre?: import("@/lib/estdata").CadastreRecord;
+  preBakedEhr?: import("@/lib/estdata").EhrBuilding;
 };
 
 export const DEMO_LISTINGS: DemoListing[] = [
@@ -201,6 +208,57 @@ export const DEMO_LISTINGS: DemoListing[] = [
       "https://img-kv.ee/image/object/39/8777/134738777.jpg",
     ],
     story: "Uueväärne ja nutika planeeringuga 1-toaline Pille 11 majas (2019) — lift, maa-alune garaaž, energiamärgis B, plaan olemas.",
+    preBakedCadastre: {
+      geom: "POLYGON((0 0,0 1,1 1,1 0,0 0))",
+      tunnus: "78401:108:4320",
+      siht1: "Elamumaa",
+      siht2: null,
+      siht3: null,
+      so_prts1: 100,
+      registreeritud: "2018-06-15",
+      pindala: 1847,
+      ads_oid: "0",
+      aadress: "Pille tn 11",
+      hkood: "78401:108:4320",
+      kinnistu: "Pille tn 11 korterelamu",
+      omvorm: "Eraomand",
+      maks_hind: null,
+      estprop_median_eur_m2: 4200,
+      adob_id: null,
+      tsentroid_x: 540200,
+      tsentroid_y: 6589700,
+      tais_aadress: "Pille tn 11, Veerenni, Kesklinna linnaosa, Tallinn",
+    },
+    preBakedEhr: {
+      ehr_code: "120856345",
+      taisaadress: "Pille tn 11, Veerenni, Kesklinna linnaosa, Tallinn",
+      nimetus: "Korterelamu",
+      esmaneKasutus: "2019",
+      ehAlustKp: "2017-04-12",
+      tubadeArv: null,
+      ehitisalunePind: 412,
+      suletud_netopind: 3420,
+      mahtBruto: null,
+      minKorrusteArv: 6,
+      maxKorrusteArv: 7,
+      energy: [
+        {
+          energiaKlass: "B",
+          energiaValjastKp: "2019-03-20",
+          energiaKehtibKuniKp: "2029-03-19",
+          energiaKaalKasutus: null,
+          tarnEn: 95,
+          tarnEnKK: null,
+          kytteTyypTxt: "Kaugküte",
+        },
+      ],
+      katastriyksused: [
+        { katastritunnus: "78401:108:4320", taisaadress: "Pille tn 11, Veerenni, Kesklinna linnaosa, Tallinn" },
+      ],
+      technical: [
+        { klNimetus: "EH_KYT_TYYP", nimetus: "Küte", lisavaartus: "Kaugküte" },
+      ],
+    },
     demoEnrichment: {
       estpropMedianEurM2: 4200,    // Kesklinn premium
       nationalPercentile: 82,
