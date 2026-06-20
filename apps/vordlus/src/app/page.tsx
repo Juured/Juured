@@ -689,11 +689,24 @@ export default function Home() {
               ))}
             </div>
           </div>
-          <p className="mt-6 text-[12px] leading-6 text-faint max-w-4xl">
-            Hinna, elamiskulude, tulevikuväärtuse ja elustiili skoorid on arvutuslikud ning sõltuvad
-            sisestatud hinnast, pindalast ja registrites leiduvatest andmetest. Enne ostuotsust kontrolli
-            olulised faktid alati algallikatest või pädeva spetsialistiga.
-          </p>
+          <div className="mt-6 flex flex-col gap-4 border-t border-rule pt-6 sm:flex-row sm:items-center sm:justify-between">
+            <div>
+              <p className="text-[10.5px] font-semibold uppercase tracking-[0.14em] text-muted">
+                Küsimused andmete või koostöö kohta?
+              </p>
+              <p className="mt-2 text-[13px] leading-6 text-faint max-w-2xl">
+                Hinna, elamiskulude, tulevikuväärtuse ja elustiili skoorid on arvutuslikud ning sõltuvad
+                sisestatud hinnast, pindalast ja registrites leiduvatest andmetest. Enne ostuotsust kontrolli
+                olulised faktid alati algallikatest või pädeva spetsialistiga.
+              </p>
+            </div>
+            <a
+              href="/contact"
+              className="inline-flex w-fit items-center border border-ink bg-ink px-5 py-3 text-[12px] font-semibold uppercase tracking-wider text-paper hover:bg-ink/85 transition-colors"
+            >
+              Kontakt
+            </a>
+          </div>
         </div>
       </section>
 
