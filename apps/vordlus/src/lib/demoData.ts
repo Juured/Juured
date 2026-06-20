@@ -1,21 +1,28 @@
 // Hackathon demo listings — 3 hand-picked, currently active Tallinn
-// properties with verified listing photos. These are loaded by both the
+// Kesklinna apartments around the €200k mark. These are loaded by both the
 // "Lae 3 näidet (Tallinn)" button on the empty state and the first-visit
 // auto-resolve effect.
 //
 // Sources (all verified live as of 2026-06-20):
-//   - Ehitajate tee 43 (E43)   cke.ee/566041   — 1964 paneelmaja, Mustamäe, 42.1m², 2-toaline, €119k
-//   - Tornimäe tn 7 (T7)       cke.ee/566248   — 2007 kivimaja (30-korrust), Kesklinn, 48.4m², 2-toaline, €204.9k
-//   - Vabaduse pst 151b (V151) cke.ee/565879   — 1970 Nõmme üksikelamu, 126.4m², 4-toaline, €399.5k
+//   - Tartu mnt 24 (TM24)         kv.ee/3848412   — 1957 kivimaja, Kesklinn, 72.7 m², 3-toaline, €219k
+//                                     "Kliendipäeva pakkumine" — tavahind 224k, hetkel 219k
+//   - Lembitu tn 7 (LE7)         kv.ee/3838209   — 1955 kivimaja, Kesklinn, 58.3 m², 2-toaline, €216k
+//                                     Omanikult, renoveeritud, möbleeritud
+//   - Pille tn 11/3 (PI3)        kv.ee/3845425   — 2019 kivimaja, Veerenni/Kesklinn, 35.1 m², 1-toaline, €189k
+//                                     Uus ehitis, energiamärgis B, nutikas planeering
 //
-// Photo URLs use CKE's CDN: haldus.cke.ee/upload/screen/{token}.jpg — real
-// photos from the broker's actual listing page (no stock images, no AI art).
-// CKE detail pages don't display an energy-class letter, so energyClass is
-// left undefined for the new listings. The EHR data from /api/resolve will
-// fill in energy if the building has a registered certificate.
+// Photo URLs use kv.ee's CDN: img-kv.ee/image/object/... — real photos from
+// the listing (no stock images, no AI art). The "Vaata kuulutust ↗" link
+// in the comparison column links to the kv.ee listing so users can verify
+// the source. CORS is open (Access-Control-Allow-Origin: *).
+//
+// Energy classes are taken straight from the listing where shown
+// (TM24=C, PI3=B, LE7="Puudub" → undefined). The EHR /api/resolve will
+// fill in energy if the building has a registered certificate (most 1950s
+// kivimaja do not).
 
 export type DemoListing = {
-  label: string;          // 2–3 char monogram (e.g. "E43")
+  label: string;          // 2–3 char monogram (e.g. "TM24")
   address: string;        // user-facing address string
   raw: string;            // the actual `raw` input we send to /api/resolve
   price: number;
@@ -23,8 +30,8 @@ export type DemoListing = {
   rooms: number;
   energyClass?: string;   // for display
   yearBuilt?: number;
-  buildingType: string;   // 60s paneelmaja / 2007 kivimaja / Nõmme üksikelamu
-  district: string;       // Mustamäe / Kesklinn / Nõmme
+  buildingType: string;   // 1957 kivimaja / renoveeritud kivimaja / 2019 kivimaja
+  district: string;       // Kesklinn (Tartu mnt / Lembitu park / Veerenni)
   // Pre-computed demo enrichment (until the Coolify scrape service is
   // deployed and the live /api/enrich fills these in). Fields not listed
   // here are NULL until the scrape service is up — the panel shows
@@ -44,124 +51,153 @@ export type DemoListing = {
     hasFloorPlan?: boolean;          // floor plan present
     completenessOverride?: { score: number; missing: string[] };
   };
-  listingUrl: string;     // public link (cke.ee)
-  broker: string;         // CKE Kinnisvara
+  listingUrl: string;     // public link (kv.ee) — drives "Vaata kuulutust ↗"
+  broker: string;
   photos: string[];       // ordered, [0] = main, [1+] = gallery
-  story: string;          // one-line narrative (shown in the demo if we add it)
+  story: string;          // one-line narrative
 };
 
 export const DEMO_LISTINGS: DemoListing[] = [
   {
-    label: "E43",
-    address: "Ehitajate tee 43, Mustamäe linnaosa, Tallinn",
-    raw: "Ehitajate tee 43, Tallinn",
-    price: 119000,
-    area: 42.1,
-    rooms: 2,
-    yearBuilt: 1964,
-    buildingType: "1960ndate paneelmaja",
-    district: "Mustamäe",
-    listingUrl: "https://cke.ee/property/566041/",
-    broker: "CKE Kinnisvara",
+    label: "TM24",
+    address: "Tartu mnt 24, Kesklinna linnaosa, Tallinn",
+    raw: "Tartu mnt 24, Tallinn",
+    price: 219000,
+    area: 72.7,
+    rooms: 3,
+    energyClass: "C",
+    yearBuilt: 1957,
+    buildingType: "1957. aasta kivimaja (stalinistlik)",
+    district: "Kesklinn (Tartu mnt / Liivalaia nurk)",
+    listingUrl: "https://www.kv.ee/kliendipaeval-eripakkumine-7000-eurot-tavahind-224-3848412.html",
+    broker: "Eveli Lindell (Lindell Kinnisvara OÜ)",
     photos: [
-      "https://haldus.cke.ee/upload/screen/x57mg0vc61kj8dfr3n2p.jpg",
-      "https://haldus.cke.ee/upload/screen/157xmwd0zsp9jfgb3rk6.jpg",
-      "https://haldus.cke.ee/upload/screen/38gw6pqrtsxn9d4yz0mh.jpg",
-      "https://haldus.cke.ee/upload/screen/4mdx0531pvc8ykwr2bst.jpg",
-      "https://haldus.cke.ee/upload/screen/s6yhk07pw5rx984vfz1d.jpg",
-      "https://haldus.cke.ee/upload/screen/dvk4tpf06c7q5y3mz8bh.jpg",
+      "https://img-kv.ee/image/object/4/6785/135016785.jpg",
+      "https://img-kv.ee/image/object/39/6784/135016784.jpg",
+      "https://img-kv.ee/image/object/39/6770/135016770.jpg",
+      "https://img-kv.ee/image/object/39/6778/135016778.jpg",
+      "https://img-kv.ee/image/object/39/6779/135016779.jpg",
+      "https://img-kv.ee/image/object/39/6781/135016781.jpg",
+      "https://img-kv.ee/image/object/39/6777/135016777.jpg",
+      "https://img-kv.ee/image/object/39/6772/135016772.jpg",
+      "https://img-kv.ee/image/object/39/6776/135016776.jpg",
+      "https://img-kv.ee/image/object/39/6783/135016783.jpg",
+      "https://img-kv.ee/image/object/39/6771/135016771.jpg",
+      "https://img-kv.ee/image/object/39/6774/135016774.jpg",
+      "https://img-kv.ee/image/object/39/6768/135016768.jpg",
+      "https://img-kv.ee/image/object/39/6786/135016786.jpg",
+      "https://img-kv.ee/image/object/39/6782/135016782.jpg",
+      "https://img-kv.ee/image/object/39/6773/135016773.jpg",
+      "https://img-kv.ee/image/object/39/6775/135016775.jpg",
+      "https://img-kv.ee/image/object/39/6780/135016780.jpg",
+      "https://img-kv.ee/image/object/39/6788/135016788.jpg",
+      "https://img-kv.ee/image/object/39/6792/135016792.jpg",
+      "https://img-kv.ee/image/object/39/6791/135016791.jpg",
+      "https://img-kv.ee/image/object/39/6787/135016787.jpg",
+      "https://img-kv.ee/image/object/39/6789/135016789.jpg",
+      "https://img-kv.ee/image/object/39/6790/135016790.jpg",
+      "https://img-kv.ee/image/object/39/8180/134938180.jpg",
     ],
-    story: "Soodne 2-toaline Mustamäel — 1964. aasta paneelmaja, hea algus kinnisvaraturul.",
+    story: "Kliendipäeva pakkumine — 3-toaline ajaloolise hõnguga korter Tartu mnt 24 stalinistlikus kivimajas (€224k → €219k).",
     demoEnrichment: {
-      estpropMedianEurM2: 2300,    // Mustamäe median
-      nationalPercentile: 22,
-      districtAverageEurM2: 2300,
-      nationalEnergyMode: "C",
-      daysOnMarket: 14,
-      firstSeenAt: Date.now() - 14 * 86_400_000,
+      estpropMedianEurM2: 4200,    // Kesklinn premium
+      nationalPercentile: 75,
+      districtAverageEurM2: 4200,
+      nationalEnergyMode: "B",
+      daysOnMarket: 22,
+      firstSeenAt: Date.now() - 22 * 86_400_000,
       priceHistory: [
-        { date: Date.now() - 14 * 86_400_000, price: 125000 },
-        { date: Date.now() - 7 * 86_400_000, price: 119000 },
+        { date: Date.now() - 22 * 86_400_000, price: 224000 },
+        { date: Date.now() - 5 * 86_400_000, price: 219000 },
       ],
-      descriptionLen: 740,
-      hasFloorPlan: true,
-      completenessOverride: { score: 95, missing: [] },
+      descriptionLen: 2120,
+      hasFloorPlan: false,
+      completenessOverride: { score: 90, missing: ["floor_plan"] },
     },
   },
   {
-    label: "T7",
-    address: "Tornimäe tn 7, Kesklinna linnaosa, Tallinn",
-    raw: "Tornimäe tn 7, Tallinn",
-    price: 204900,
-    area: 48.4,
+    label: "LE7",
+    address: "Lembitu tn 7, Kesklinna linnaosa, Tallinn",
+    raw: "Lembitu tn 7, Tallinn",
+    price: 216000,
+    area: 58.3,
     rooms: 2,
-    yearBuilt: 2007,
-    buildingType: "2007. aasta kivimaja (30-korruseline torn)",
-    district: "Kesklinn",
-    listingUrl: "https://cke.ee/property/566248/",
-    broker: "CKE Kinnisvara",
+    yearBuilt: 1955,
+    buildingType: "1955. aasta kivimaja (renoveeritud)",
+    district: "Kesklinn (Lembitu park)",
+    listingUrl: "https://www.kv.ee/muua-avarate-akende-ja-korgete-lagedega-renoveerit-3838209.html",
+    broker: "Kristi (omanik / eraisik)",
     photos: [
-      "https://haldus.cke.ee/upload/screen/m83kw0csfdg7591njqpy.jpg",
-      "https://haldus.cke.ee/upload/screen/0wt6sd18p5gqkcj29v3f.jpg",
-      "https://haldus.cke.ee/upload/screen/19xfrh5gj0sbzy62vk3p.jpg",
-      "https://haldus.cke.ee/upload/screen/34dx1y7gzpwf08qskrjc.jpg",
-      "https://haldus.cke.ee/upload/screen/84vqfkdc5mzws2xbyt6j.jpg",
-      "https://haldus.cke.ee/upload/screen/qvzsjbm2f6ncpdy594r8.jpg",
+      "https://img-kv.ee/image/object/39/1960/134231960.jpg",
+      "https://img-kv.ee/image/object/39/1957/134231957.jpg",
+      "https://img-kv.ee/image/object/39/1958/134231958.jpg",
+      "https://img-kv.ee/image/object/39/1959/134231959.jpg",
+      "https://img-kv.ee/image/object/39/1961/134231961.jpg",
+      "https://img-kv.ee/image/object/39/1962/134231962.jpg",
+      "https://img-kv.ee/image/object/39/1973/134231973.jpg",
+      "https://img-kv.ee/image/object/39/1956/134231956.jpg",
+      "https://img-kv.ee/image/object/39/1974/134231974.jpg",
+      "https://img-kv.ee/image/object/39/3450/137803450.jpg",
+      "https://img-kv.ee/image/object/39/3452/137803452.jpg",
     ],
-    story: "Kesklinna torn — 9/30 korrust, Stockmanni kõrval, kaasaegne 2007. aasta kivimaja.",
+    story: "Renoveeritud ja möbleeritud 2-toaline Lembitu pargi ääres — kõrged laed, kalasaba parkett, kogu mööbel hinna sees, omanikult.",
     demoEnrichment: {
-      estpropMedianEurM2: 4200,    // Kesklinn high
+      estpropMedianEurM2: 4200,    // Kesklinn premium
+      nationalPercentile: 78,
+      districtAverageEurM2: 4200,
+      nationalEnergyMode: "B",
+      daysOnMarket: 11,
+      firstSeenAt: Date.now() - 11 * 86_400_000,
+      priceHistory: [
+        { date: Date.now() - 11 * 86_400_000, price: 216000 },
+      ],
+      descriptionLen: 1430,
+      hasFloorPlan: false,
+      completenessOverride: { score: 80, missing: ["floor_plan", "energy_class"] },
+    },
+  },
+  {
+    label: "PI3",
+    address: "Pille tn 11, Veerenni, Kesklinna linnaosa, Tallinn",
+    raw: "Pille tn 11, Tallinn",
+    price: 189000,
+    area: 35.1,
+    rooms: 1,
+    energyClass: "B",
+    yearBuilt: 2019,
+    buildingType: "2019. aasta kivimaja (uusarendus)",
+    district: "Kesklinn (Veerenni / Uus-Veerenni)",
+    listingUrl: "https://www.kv.ee/kortermuugile-on-tulnud-valguskullane-ja-nutika-pl-3845425.html",
+    broker: "Laur Uusmägi (Take Kinnisvara, KV.EE Tippmaakler 2025)",
+    photos: [
+      "https://img-kv.ee/image/object/4/9471/134739471.jpg",
+      "https://img-kv.ee/image/object/39/9467/134739467.jpg",
+      "https://img-kv.ee/image/object/39/9472/134739472.jpg",
+      "https://img-kv.ee/image/object/39/9461/134739461.jpg",
+      "https://img-kv.ee/image/object/39/9462/134739462.jpg",
+      "https://img-kv.ee/image/object/39/9465/134739465.jpg",
+      "https://img-kv.ee/image/object/39/9469/134739469.jpg",
+      "https://img-kv.ee/image/object/39/9473/134739473.jpg",
+      "https://img-kv.ee/image/object/39/9475/134739475.jpg",
+      "https://img-kv.ee/image/object/39/9463/134739463.jpg",
+      "https://img-kv.ee/image/object/39/9470/134739470.jpg",
+      "https://img-kv.ee/image/object/39/9478/134739478.jpg",
+      "https://img-kv.ee/image/object/39/9602/134739602.jpg",
+      "https://img-kv.ee/image/object/39/9476/134739476.jpg",
+      "https://img-kv.ee/image/object/39/8777/134738777.jpg",
+    ],
+    story: "Uueväärne ja nutika planeeringuga 1-toaline Pille 11 majas (2019) — lift, maa-alune garaaž, energiamärgis B, plaan olemas.",
+    demoEnrichment: {
+      estpropMedianEurM2: 4200,    // Kesklinn premium
       nationalPercentile: 82,
       districtAverageEurM2: 4200,
       nationalEnergyMode: "B",
-      daysOnMarket: 8,
-      firstSeenAt: Date.now() - 8 * 86_400_000,
+      daysOnMarket: 6,
+      firstSeenAt: Date.now() - 6 * 86_400_000,
       priceHistory: [
-        { date: Date.now() - 8 * 86_400_000, price: 209900 },
-        { date: Date.now() - 3 * 86_400_000, price: 204900 },
+        { date: Date.now() - 6 * 86_400_000, price: 189000 },
       ],
-      descriptionLen: 1180,
-      hasFloorPlan: true,
-      completenessOverride: { score: 100, missing: [] },
-    },
-  },
-  {
-    label: "V151",
-    address: "Vabaduse pst 151b, Nõmme linnaosa, Tallinn",
-    raw: "Vabaduse pst 151, Tallinn",
-    price: 399500,
-    area: 126.4,
-    rooms: 4,
-    energyClass: "F",
-    yearBuilt: 1970,
-    buildingType: "Nõmme üksikelamu (vajab renoveerimist)",
-    district: "Nõmme",
-    listingUrl: "https://cke.ee/property/565879/",
-    broker: "CKE Kinnisvara",
-    // Real photos from cke.ee (verified 2026-06-20). haldus.cke.ee is the
-    // broker's media CDN — these are the actual listing screenshots, not
-    // stock or AI-generated imagery.
-    photos: [
-      "https://haldus.cke.ee/upload/screen/vhs4ykcbg6f8mn293zwp.jpg",
-      "https://haldus.cke.ee/upload/screen/p98y7z1sxmbr20qjwd4t.jpg",
-      "https://haldus.cke.ee/upload/screen/w4x7qb83g59mrvnd0cty.jpg",
-      "https://haldus.cke.ee/upload/screen/1jxpfwtyd9v5zskmn437.jpg",
-    ],
-    story: "Kivimaja Nõmmel — kamin-ahi elutoas, 616m² krunt, palju potentsiaali. Ideaalne perele.",
-    demoEnrichment: {
-      estpropMedianEurM2: 2280,    // Viimsi vald / Nõmme-area valuation
-      nationalPercentile: 60,
-      districtAverageEurM2: 2280,
-      nationalEnergyMode: "C",
-      daysOnMarket: 45,
-      firstSeenAt: Date.now() - 45 * 86_400_000,
-      priceHistory: [
-        { date: Date.now() - 45 * 86_400_000, price: 449000 },
-        { date: Date.now() - 30 * 86_400_000, price: 429000 },
-        { date: Date.now() - 14 * 86_400_000, price: 410000 },
-        { date: Date.now() - 3 * 86_400_000, price: 399500 },
-      ],
-      descriptionLen: 1450,
+      descriptionLen: 1380,
       hasFloorPlan: true,
       completenessOverride: { score: 100, missing: [] },
     },
